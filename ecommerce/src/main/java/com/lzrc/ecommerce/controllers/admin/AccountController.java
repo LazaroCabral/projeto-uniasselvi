@@ -1,5 +1,5 @@
 package com.lzrc.ecommerce.controllers.admin;
 
-public class Account {
+public class AccountController {
 
 }
