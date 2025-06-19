@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form method="post" th:attr="action=@{/admin/add-product}">
+            <label for="sku">sku:</label>
+            <input id="sku" type="text" name="sku">
+            <label for="name">nome:</label>
+            <input id="name" type="text" name="name">
+            <label for="description">descrição:</label>
+            <textarea id="description" name="description"></textarea>
+            <label for="price">preço:</label>
+            <input id="price" type="text" name="price">
+            <button type="submit">Adicionar produto</button>
+        </form>
+        <span th:if="${success} != null" th:text="(${success} == true)? 'Produto cadastrado com sucesso!' : ''"></span>
+        <div th:if="${productRecord} != null" th:object="${productRecord}">
+            <p th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></p>
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+        </div>
+    </body>
+</html>
