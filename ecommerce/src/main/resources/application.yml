@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: ecommerce
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  jpa:
+    generate-ddl: false
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+flyway:
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+  schemas: ${DB_DATABASE}
+  url: ${DB_URL}
+  locations: db/migration
+
