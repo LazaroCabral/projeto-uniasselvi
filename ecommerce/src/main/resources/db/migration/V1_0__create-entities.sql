@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS `admins` (cpf varchar(11) NOT NULL PRIMARY KEY, name varchar(60) NOT NULL, password varchar(30) NOT NULL);
+CREATE TABLE IF NOT EXISTS `clients` (cpf varchar(11) NOT NULL PRIMARY KEY, name varchar(60) NOT NULL, email varchar(40), password varchar(30) NOT NULL, account_balance decimal(7,2) DEFAULT 0.0);
+CREATE TABLE IF NOT EXISTS `products` (sku varchar(14) NOT NULL PRIMARY KEY, name varchar(60) NOT NULL, description varchar(255), price decimal(7,2) DEFAULT 0.0);
