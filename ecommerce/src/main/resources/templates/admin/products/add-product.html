@@ -5,7 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <form method="post" th:attr="action=@{/admin/add-product}">
+        <form method="post" th:attr="action=@{/admin/add-product}" enctype="multipart/form-data">
+            <label for="product-image">imagem do produto:</label>
+            <input id="product-image" type="file" name="product-image">
             <label for="sku">sku:</label>
             <input id="sku" type="text" name="sku">
             <label for="name">nome:</label>
@@ -16,7 +18,8 @@
             <input id="price" type="text" name="price">
             <button type="submit">Adicionar produto</button>
         </form>
-        <span th:if="${success} != null" th:text="(${success} == true)? 'Produto cadastrado com sucesso!' : ''"></span>
+        <span th:if="${success} != null" th:text="(${success} == true)? 'Produto cadastrado com sucesso!' : 'Houve um erro ao cadastrar o Produto!'"></span>
+        <span th:if="${imageIsSaved} != null" th:text="(${imageIsSaved} == false)? 'A imagem não pode ser salva!':''"></span>
         <div th:if="${productRecord} != null" th:object="${productRecord}">
             <p th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></p>
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
