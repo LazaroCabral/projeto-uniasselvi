@@ -1,8 +1,17 @@
+products:
+  image:
+    files:
+      path: ${PRODUCTS_IMAGES}
+
 spring:
   application:
     name: ecommerce
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  servlet:
+    multipart:
+      max-file-size: 2048KB
+      max-request-size: 500KB
   jpa:
     generate-ddl: false
   datasource:
