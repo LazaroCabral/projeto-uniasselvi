@@ -6,10 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Entity
 @Table(name = "products")
 @AllArgsConstructor
+@Getter
 public class Product {
 
     @Id
