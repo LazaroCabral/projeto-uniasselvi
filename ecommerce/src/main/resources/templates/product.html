@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>
+            <div th:if="${product} != null" th:object="${product}">
+                <img th:attr="src='/images/'+*{sku}+'.png'" height="50px" width="100px" alt="">
+                <h2 th:text="*{name}"></h2>
+                <h3 th:text="*{price}"></h3>
+                <p th:text="*{description}"></p>
+            </div>
+            <span th:if="${productIsFound} != null" th:text="(${productIsFound} == true)? 'Produto não encontrado!' : 'Produto não encontrado!'"></span>
+        </div>
+    </body>
+</html>
