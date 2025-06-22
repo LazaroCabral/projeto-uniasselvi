@@ -46,6 +46,7 @@ public class ProductsController {
         if(bindingResult.hasErrors()){
             return mv;
         }
+
         Product product = new Product(productRecord.sku(), productRecord.name(), 
             productRecord.description(), productRecord.price());
         if(productImage.isEmpty()){
@@ -53,15 +54,23 @@ public class ProductsController {
             mv.addObject("success", Boolean.valueOf(true));
             return mv;
         }
-        try {
-            productService.saveWithImage(productImage.getBytes(), product);
-            productService.save(product);
-            mv.addObject("success", Boolean.TRUE);
-        } catch (SaveImageException e) {
-            e.printStackTrace();
+
+        String productImageName = productImage.getOriginalFilename();
+        
+        if(productImageName != null && productImageName.matches("^.*?(\\.png)")){
+            try {
+                productService.saveWithImage(productImage.getBytes(), product);
+                mv.addObject("success", Boolean.TRUE);
+            } catch (SaveImageException e) {
+                e.printStackTrace();
+                mv.addObject("imageIsSaved", Boolean.FALSE);
+                productService.save(product);
+            }
+        } else{
             mv.addObject("imageIsSaved", Boolean.FALSE);
             productService.save(product);
         }
+
         mv.addObject("success", Boolean.valueOf(true));
         return mv;
     }
