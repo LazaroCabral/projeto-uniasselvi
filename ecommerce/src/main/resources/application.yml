@@ -12,6 +12,9 @@ spring:
     multipart:
       max-file-size: 2048KB
       max-request-size: 500KB
+  web:
+    resources:
+      static-locations: ${STATIC_FILES_PATH}
   jpa:
     generate-ddl: false
   datasource:
