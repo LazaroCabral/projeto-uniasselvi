@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Cadastrar Usuario</h1>
+        <form method="post" th:attr="action=@{/client/add-client}">
+            <label for="cpf">cpf:</label>
+            <input id="cpf" type="text" name="cpf">
+            <label for="name">nome:</label>
+            <input id="name" type="text" name="name">
+            <label for="email">email:</label>
+            <input id="email" type="text" name="email">
+            <label for="password">senha:</label>
+            <input id="password" type="text" name="password">
+            <button type="submit">Cadastrar</button>
+        </form>
+        <div th:if="${success} != null">
+            <span th:if="${success} != null" th:text="(${success})? 'Cadastro realizado com sucesso!' : 'Não foi possivel realizar o cadastro!' "></span>
+            <span th:if="${clientAlreadyExists} != null" th:text="(${clientAlreadyExists})? 'O cliente já existe!' : ''"></span>
+        </div>
+        
+        <div th:if="${clientRecord} != null" th:object="${clientRecord}">
+            <p th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></p>
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+        </div>
+        
+    </body>
+</html>
