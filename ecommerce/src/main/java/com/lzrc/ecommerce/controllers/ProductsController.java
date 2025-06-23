@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
+import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.records.ProductRecord;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 
@@ -21,11 +22,14 @@ public class ProductsController {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    CustomProductRepository customProductRepository;
+
     @GetMapping("/products")
     public ModelAndView home(Pageable pageable){
         ModelAndView mv = new ModelAndView("products.html");
-        Page<ProductRecordResponse> products = productRepository
-            .findAllBy(pageable);
+        Page<ProductRecordResponse> products = customProductRepository
+            .findAll(pageable);
         mv.addObject("products", products.getContent());
         return mv;
     }
