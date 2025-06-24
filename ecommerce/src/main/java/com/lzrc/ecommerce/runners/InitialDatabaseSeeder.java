@@ -17,7 +17,7 @@ public class InitialDatabaseSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Long hasAdmin = adminRepository.count();
         if(hasAdmin == 0){
-            Admin admin = new Admin("00000000000", "admin", "admin1234");
+            Admin admin = new Admin("00000000000", "admin", "{noop}admin1234");
             adminRepository.save(admin);
         }
     }
