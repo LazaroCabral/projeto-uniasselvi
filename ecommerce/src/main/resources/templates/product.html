@@ -7,7 +7,7 @@
     <body>
         <div>
             <div th:if="${product} != null" th:object="${product}">
-                <img th:attr="src='/images/'+*{sku}+'.png'" height="50px" width="100px" alt="">
+                <img th:attr="src='/static/images/'+*{sku}+'.png'" height="50px" width="100px" alt="">
                 <h2 th:text="*{name}"></h2>
                 <h3 th:text="*{price}"></h3>
                 <p th:text="*{description}"></p>
