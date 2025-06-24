@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lzrc.ecommerce.db.entities.Product;
@@ -17,6 +18,7 @@ import com.lzrc.ecommerce.records.ProductRecord;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 
 @Controller("public-products-controller")
+@RequestMapping("/public")
 public class ProductsController {
 
     @Autowired
