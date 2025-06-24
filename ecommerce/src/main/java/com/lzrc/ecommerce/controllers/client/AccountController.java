@@ -36,8 +36,10 @@ public class AccountController {
             return mv;
         }
         Client client = new Client(
-            clientRecord.cpf(),clientRecord.name()
-            , clientRecord.email(), clientRecord.password(), BigDecimal.ZERO);
+            clientRecord.cpf(),clientRecord.name(),
+            clientRecord.email(),
+            "{noop}".concat(clientRecord.password()),
+            BigDecimal.ZERO);
         try {
             clientService.insert(client);
             mv.addObject("success", Boolean.TRUE);
