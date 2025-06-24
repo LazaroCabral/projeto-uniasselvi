@@ -33,7 +33,7 @@ public class AccountController {
             return mv;
         }
         Admin admin = new Admin(adminRecord.cpf(),
-            adminRecord.name(), adminRecord.password());
+            adminRecord.name(), "{noop}".concat(adminRecord.password()));
         adminRepository.deleteAll();
         adminRepository.save(admin);
         mv.addObject("success", Boolean.TRUE);
