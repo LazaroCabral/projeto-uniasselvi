@@ -1,18 +1,34 @@
 package com.lzrc.ecommerce.services.client;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lzrc.ecommerce.db.entities.Client;
 import com.lzrc.ecommerce.db.repositories.ClientRepository;
+import com.lzrc.ecommerce.db.repositories.custom.CustomClientRepository;
 import com.lzrc.ecommerce.services.client.exceptions.ClientAlreadyExistsException;
 import com.lzrc.ecommerce.services.client.exceptions.ClientNotFoundException;
+import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 
 @Service
 public class ClientServiceImpl implements ClientService {
 
     @Autowired
     ClientRepository clientRepository;
+
+    @Autowired
+    CustomClientRepository customClientRepository;
+
+    private void debit(Client client, BigDecimal value) throws InsufficientBalanceException{
+        if(client.getAccountBalance().compareTo(value) >= 0){
+            client.setAccountBalance(
+            client.getAccountBalance().subtract(value));
+            customClientRepository.save(client);
+        } else {throw new InsufficientBalanceException();}
+    }
 
     @Override
     public void insert(Client client) throws ClientAlreadyExistsException {
@@ -34,5 +50,16 @@ public class ClientServiceImpl implements ClientService {
         }
     }
 
+    @Override
+    public void debit(String cpf, BigDecimal value) throws InsufficientBalanceException, ClientNotFoundException {
+        Optional<Client> optionalClient = 
+            customClientRepository.findByIdWithWriteLock(cpf);
+        if(optionalClient.isPresent()){
+            Client client = optionalClient.get();
+            debit(client, value);
+        } else {
+            throw new ClientNotFoundException();}
+    }
+    
 
 }
