@@ -36,8 +36,7 @@ public class ClientSessionServiceImpl implements ClientSessionService{
     HttpSession session;
 
     private void invalidateSession(){
-        SecurityContextHolder.getContext()
-            .getAuthentication().setAuthenticated(false);
+        session.invalidate();
     }
 
     @Override
