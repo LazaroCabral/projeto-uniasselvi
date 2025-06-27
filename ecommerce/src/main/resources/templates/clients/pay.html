@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>
+            <h1>Comprar produto</h1>
+            <div th:if="${product} != null" th:object="${product}">
+                <img th:attr="src='/static/images/'+*{sku}+'.png'" height="50px" width="100px" alt="">
+                <h2 th:text="*{name}"></h2>
+                <h3 th:text="*{price}"></h3>
+                <p th:text="*{description}"></p>
+                <form th:attr="action=@{/client/pay}" method="post">
+                    <input type="hidden" id="sku" name="sku" th:value="${product.sku}">
+                    <button type="submit">comprar</button>
+                </form>
+            </div>
+            <div th:if="${buySuccess} != null">
+                <span th:text="(${buySuccess})? 'Compra efetuada com sucesso!' : 'Não foi possivel efetuar a compra!' "></span>
+                <div th:if="${buySuccess} == false">
+                    <span th:if="${productHeldNotFound} != null" th:text="(${productHeldNotFound})? 'Produto não encontrado!' : '' "></span>
+                    <span th:if="${insufficientBalance} != null" th:text="(${insufficientBalance})? 'Saldo insuficiente!' : '' "></span>
+                </div>
+            </div>
+
+            <div th:if="(${success} != null and ${success} == false)">
+                <span th:if="${productNotFound} != null" th:text="(${productNotFound})? 'Produto não encontrado!' : '' "></span>
+            </div>
+        </div>
+    </body>
+</html>
