@@ -56,7 +56,7 @@ public class PaymentController {
         } catch (ProductNotHeldException e) {
             mv.addObject("productHeldNotFound", Boolean.TRUE);
         } catch (ClientSessionIsInvalidException e) {
-            mv.setViewName("public/products");
+            mv.setViewName("redirect:/public/products");
         }
         
         return mv;
