@@ -11,6 +11,9 @@
                 <h2 th:text="*{name}"></h2>
                 <h3 th:text="*{price}"></h3>
                 <p th:text="*{description}"></p>
+                <form th:attr="action=@{/client/pay/}+*{sku}" method="get">
+                    <button type="submit">comprar</button>
+                </form>
             </div>
             <span th:if="${productIsFound} != null" th:text="(${productIsFound} == true)? 'Produto não encontrado!' : 'Produto não encontrado!'"></span>
         </div>
