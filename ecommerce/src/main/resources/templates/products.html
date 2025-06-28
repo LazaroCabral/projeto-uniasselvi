@@ -20,6 +20,11 @@
                     </td>
                     <td th:text="${product.name}"></td>
                     <td th:text="${product.price}"></td>
+                    <td>
+                        <form th:attr="action=@{/public/product/}+${product.sku}" method="get">
+                            <button type="submit">Conferir</button>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>
