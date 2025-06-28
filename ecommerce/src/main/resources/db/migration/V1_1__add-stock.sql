@@ -1,0 +1,1 @@
+ALTER TABLE `products` ADD COLUMN `available_stock` int NOT NULL DEFAULT 0;

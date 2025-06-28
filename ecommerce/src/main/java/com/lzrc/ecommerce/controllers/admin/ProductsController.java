@@ -48,7 +48,7 @@ public class ProductsController {
         }
 
         Product product = new Product(productRecord.sku(), productRecord.name(), 
-            productRecord.description(), productRecord.price());
+            productRecord.description(), productRecord.price(), productRecord.availableStock());
         if(productImage.isEmpty()){
             productService.save(product);
             mv.addObject("success", Boolean.valueOf(true));

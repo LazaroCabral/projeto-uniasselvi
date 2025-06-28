@@ -16,6 +16,8 @@
             <textarea id="description" name="description"></textarea>
             <label for="price">preço:</label>
             <input id="price" type="text" name="price">
+            <label for="availableStock">estoque disponivel:</label>
+            <input id="availableStock" type="number" th:value="0" name="availableStock">
             <button type="submit">Adicionar produto</button>
         </form>
         <span th:if="${success} != null" th:text="(${success} == true)? 'Produto cadastrado com sucesso!' : 'Houve um erro ao cadastrar o Produto!'"></span>
@@ -25,6 +27,7 @@
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
             <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+            <p th:if="${#fields.hasErrors('availableStock')}" th:errors="*{availableStock}"></p>
         </div>
     </body>
 </html>
