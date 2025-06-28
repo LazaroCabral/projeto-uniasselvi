@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
-import com.lzrc.ecommerce.records.ProductRecord;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 
 @Controller("public-products-controller")
@@ -42,7 +41,7 @@ public class ProductsController {
         Optional<Product> productOptinal=productRepository.findById(productId);
         if(productOptinal.isPresent()){
             Product product = productOptinal.get();
-            ProductRecord productRecordResponse = new ProductRecord(
+            ProductRecordResponse productRecordResponse = new ProductRecordResponse(
                 product.getSku(), product.getName(), product.getDescription()
                 , product.getPrice());
             mv.addObject("product", productRecordResponse);
