@@ -13,23 +13,23 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
-import com.lzrc.ecommerce.services.client.session.ClientSessionService;
 import com.lzrc.ecommerce.services.client.session.exceptions.ClientSessionIsInvalidException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotHeldException;
+import com.lzrc.ecommerce.services.product.purchase.ProductPurchaseService;
 
 @Controller
 @RequestMapping("client/")
 public class PaymentController {
 
     @Autowired
-    ClientSessionService clientSessionService;
+    ProductPurchaseService productPurchaseService;
 
     @GetMapping("/pay/{sku}")
     public ModelAndView paymentGet(@PathVariable String sku){
         ModelAndView mv = new ModelAndView("clients/pay.html");
         try {
-            Product product = clientSessionService.holdProduct(sku);
+            Product product = productPurchaseService.holdProduct(sku);
             mv.addObject("product", 
                 new ProductRecordResponse(product.getSku(), product.getName(), 
                     product.getDescription(), product.getPrice()));
@@ -49,7 +49,7 @@ public class PaymentController {
         mv.addObject("buySuccess", Boolean.FALSE);
 
         try {
-            clientSessionService.buyProduct(sku);
+            productPurchaseService.buyProduct(sku);
             mv.addObject("buySuccess", Boolean.TRUE);
         } catch (InsufficientBalanceException e) {
             mv.addObject("insufficientBalance", Boolean.TRUE);
