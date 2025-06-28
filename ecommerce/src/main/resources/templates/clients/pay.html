@@ -23,6 +23,11 @@
                     <span th:if="${productHeldNotFound} != null" th:text="(${productHeldNotFound})? 'Produto não encontrado!' : '' "></span>
                     <span th:if="${insufficientBalance} != null" th:text="(${insufficientBalance})? 'Saldo insuficiente!' : '' "></span>
                 </div>
+                <span>
+                    <form th:attr="action=@{/public/products}" method="get">
+                        <button type="submit">voltar a pagina de produtos</button>
+                    </form>
+                </span>
             </div>
 
             <div th:if="(${success} != null and ${success} == false)">
