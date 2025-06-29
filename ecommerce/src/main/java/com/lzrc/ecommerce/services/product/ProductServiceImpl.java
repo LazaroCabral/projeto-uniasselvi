@@ -8,12 +8,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
+import com.lzrc.ecommerce.services.product.exceptions.InvalidImageFormatException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.exceptions.SaveImageException;
 
@@ -36,6 +37,14 @@ public class ProductServiceImpl implements ProductService {
         } else{throw new InsufficientStockException();}
     }
 
+    private void imageIsValid(MultipartFile image) throws InvalidImageFormatException {
+        String productImageName = image.getOriginalFilename();
+        if(productImageName == null || 
+            productImageName.matches("^.*?(\\.png)") == false){
+            throw new InvalidImageFormatException();
+        }
+    }
+
     private boolean saveImage(byte[] productImage, String sku){
         String saveImage = imagesPath.concat("/").concat(sku).concat(".png");
         try {
@@ -53,13 +62,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
-    public void saveWithImage(byte[] productImage, Product product) throws SaveImageException {
-        boolean isSaved=saveImage(productImage, product.getSku());
+    public void saveProductImage(MultipartFile image, Product product) throws SaveImageException, InvalidImageFormatException {
+        imageIsValid(image);
+        boolean isSaved;
+        try {
+            isSaved = saveImage(image.getBytes(), product.getSku());
+        } catch (IOException e) {
+            throw new SaveImageException();
+        }
         if(isSaved!=true){
             throw new SaveImageException();
         }
-        productRepository.save(product);
     }
 
     @Override

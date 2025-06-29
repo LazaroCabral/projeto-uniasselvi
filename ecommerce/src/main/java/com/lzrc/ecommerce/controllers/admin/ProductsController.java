@@ -1,7 +1,5 @@
 package com.lzrc.ecommerce.controllers.admin;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -18,6 +16,7 @@ import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.records.ProductRecord;
 import com.lzrc.ecommerce.services.product.ProductService;
+import com.lzrc.ecommerce.services.product.exceptions.InvalidImageFormatException;
 import com.lzrc.ecommerce.services.product.exceptions.SaveImageException;
 
 import jakarta.validation.Valid;
@@ -40,7 +39,7 @@ public class ProductsController {
     @PostMapping(path = "/add-product", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
     public ModelAndView addProductPost(@RequestParam("product-image") MultipartFile productImage,
-            @Valid ProductRecord productRecord, BindingResult bindingResult) throws IOException{
+            @Valid ProductRecord productRecord, BindingResult bindingResult) {
                 
         ModelAndView mv = new ModelAndView("admin/products/add-product.html");
         if(bindingResult.hasErrors()){
@@ -49,29 +48,20 @@ public class ProductsController {
 
         Product product = new Product(productRecord.sku(), productRecord.name(), 
             productRecord.description(), productRecord.price(), productRecord.availableStock());
-        if(productImage.isEmpty()){
-            productService.save(product);
-            mv.addObject("success", Boolean.valueOf(true));
-            return mv;
-        }
 
-        String productImageName = productImage.getOriginalFilename();
+        productService.save(product);
         
-        if(productImageName != null && productImageName.matches("^.*?(\\.png)")){
+        if(productImage.isEmpty() == false) {
             try {
-                productService.saveWithImage(productImage.getBytes(), product);
+                productService.saveProductImage(productImage, product);
                 mv.addObject("success", Boolean.TRUE);
             } catch (SaveImageException e) {
-                e.printStackTrace();
                 mv.addObject("imageIsSaved", Boolean.FALSE);
-                productService.save(product);
+            } catch (InvalidImageFormatException e) {
+                mv.addObject("invalidImageFormat", Boolean.TRUE);
             }
-        } else{
-            mv.addObject("imageIsSaved", Boolean.FALSE);
-            productService.save(product);
         }
-
-        mv.addObject("success", Boolean.valueOf(true));
+        mv.addObject("success", Boolean.TRUE);
         return mv;
     }
 
