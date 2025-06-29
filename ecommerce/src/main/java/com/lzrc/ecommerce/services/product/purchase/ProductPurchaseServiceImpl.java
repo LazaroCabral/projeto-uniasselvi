@@ -5,12 +5,15 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 import com.lzrc.ecommerce.services.client.session.ClientSessionService;
 import com.lzrc.ecommerce.services.client.session.exceptions.ClientSessionIsInvalidException;
+import com.lzrc.ecommerce.services.product.ProductService;
+import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotHeldException;
 
@@ -21,6 +24,9 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    ProductService productService;
 
     @Autowired
     ClientSessionService clientSessionService;
@@ -35,13 +41,15 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
             } else {return false;}
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void buyProduct(String sku) throws InsufficientBalanceException, ClientSessionIsInvalidException, ProductNotHeldException {
+    public void buyProduct(String sku) throws InsufficientBalanceException, ClientSessionIsInvalidException, ProductNotHeldException, InsufficientStockException, ProductNotFoundException {
         HeldProduct heldProduct = (HeldProduct) session.getAttribute("heldProduct");
         if(validateHeldProduct(sku, heldProduct)){
             BigDecimal price = heldProduct.getProduct().getPrice();
             clientSessionService.debit(price);
-            
+            productService.reduceStock(sku, 1L);
+
         } else {throw new ProductNotHeldException();}
     }
 
