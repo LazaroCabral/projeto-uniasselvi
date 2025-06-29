@@ -2,8 +2,6 @@ package com.lzrc.ecommerce.controllers.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +12,7 @@ import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 import com.lzrc.ecommerce.services.client.session.exceptions.ClientSessionIsInvalidException;
+import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotHeldException;
 import com.lzrc.ecommerce.services.product.purchase.ProductPurchaseService;
@@ -43,7 +42,6 @@ public class PaymentController {
     }
 
     @PostMapping("/pay")
-    @Transactional(propagation = Propagation.NESTED)
     public ModelAndView paymentPost(String sku){
         ModelAndView mv = new ModelAndView("clients/pay.html");
         mv.addObject("buySuccess", Boolean.FALSE);
@@ -53,10 +51,12 @@ public class PaymentController {
             mv.addObject("buySuccess", Boolean.TRUE);
         } catch (InsufficientBalanceException e) {
             mv.addObject("insufficientBalance", Boolean.TRUE);
-        } catch (ProductNotHeldException e) {
-            mv.addObject("productHeldNotFound", Boolean.TRUE);
+        } catch (ProductNotHeldException | ProductNotFoundException e ) {
+            mv.addObject("productNotFound", Boolean.TRUE);
         } catch (ClientSessionIsInvalidException e) {
             mv.setViewName("redirect:/public/products");
+        } catch (InsufficientStockException e) {
+            mv.addObject("insufficientStock", Boolean.TRUE);
         }
         
         return mv;
