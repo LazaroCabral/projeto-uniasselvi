@@ -22,19 +22,14 @@ public class ClientSessionServiceImpl implements ClientSessionService{
     @Autowired
     HttpSession session;
 
-    private void invalidateSession(){
-        session.invalidate();
-    }
-
     @Override
-    public void debit(BigDecimal value) throws InsufficientBalanceException, ClientSessionIsInvalidException {
+    public void debit(BigDecimal value) throws InsufficientBalanceException {
         String cpf = SecurityContextHolder
             .getContext().getAuthentication().getName();
         try {
             clientService.debit(cpf, value);
         } catch (ClientNotFoundException e) {
             e.printStackTrace();
-            invalidateSession();
             throw new ClientSessionIsInvalidException();
         }
     }

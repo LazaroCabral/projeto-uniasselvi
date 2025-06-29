@@ -11,7 +11,6 @@ import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 import com.lzrc.ecommerce.services.client.session.ClientSessionService;
-import com.lzrc.ecommerce.services.client.session.exceptions.ClientSessionIsInvalidException;
 import com.lzrc.ecommerce.services.product.ProductService;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
@@ -43,7 +42,7 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void buyProduct(String sku) throws InsufficientBalanceException, ClientSessionIsInvalidException, ProductNotHeldException, InsufficientStockException, ProductNotFoundException {
+    public void buyProduct(String sku) throws InsufficientBalanceException, ProductNotHeldException, InsufficientStockException, ProductNotFoundException {
         HeldProduct heldProduct = (HeldProduct) session.getAttribute("heldProduct");
         if(validateHeldProduct(sku, heldProduct)){
             BigDecimal price = heldProduct.getProduct().getPrice();
