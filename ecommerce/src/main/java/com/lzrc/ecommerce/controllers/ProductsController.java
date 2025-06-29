@@ -31,6 +31,9 @@ public class ProductsController {
         ModelAndView mv = new ModelAndView("products.html");
         Page<ProductRecordResponse> products = customProductRepository
             .findAll(pageable);
+        mv.addObject("currentPage", products.getNumber());
+        mv.addObject("totalPages", products.getTotalPages());
+        mv.addObject("productsSize", products.getNumberOfElements());
         mv.addObject("products", products.getContent());
         return mv;
     }
