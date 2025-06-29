@@ -3,16 +3,19 @@ package com.lzrc.ecommerce.services.product;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
+import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
+import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
+import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.exceptions.SaveImageException;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -22,6 +25,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    CustomProductRepository customProductRepository;
+
+    private void hasSufficientStock(Product product, Long quantity) throws InsufficientStockException{
+        Long remainingStock = product.getAvailableStock() - quantity;
+        if(remainingStock >= 0){
+            product.setAvailableStock(remainingStock);
+        } else{throw new InsufficientStockException();}
+    }
 
     private boolean saveImage(byte[] productImage, String sku){
         String saveImage = imagesPath.concat("/").concat(sku).concat(".png");
@@ -52,6 +65,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void save(Product product) {
         productRepository.save(product);
+    }
+
+    @Override
+    public void reduceStock(String sku, Long quantity) throws ProductNotFoundException, InsufficientStockException {
+        Optional<Product> productOptional = productRepository.findById(sku);
+        if(productOptional.isPresent()){
+            Product product = productOptional.get();
+            hasSufficientStock(product, quantity);
+            customProductRepository.save(product);
+        } else {throw new ProductNotFoundException();}
     }
 
 }
