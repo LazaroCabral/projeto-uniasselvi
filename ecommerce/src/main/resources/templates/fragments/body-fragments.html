@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <body>
+
+        <div class="container" th:fragment="products-list">
+            <div class="row row-cols-4" th:if="${products} != null">
+                <div class="row row-cols-1" th:each="product : ${products}">
+                    <div class="product-image-container-item-list">
+                        <img class="product-image" th:attr="src='/static/images/'+${product.sku}+'.png'" height="50px" width="100px" alt="">
+                    </div>
+                    <p th:text="${product.name}"></p>
+                    <p th:text="${product.price}"></p>
+                    <form th:attr="action=@{/public/product/}+${product.sku}" method="get">
+                        <button class="btn btn-primary" type="submit">Conferir</button>
+                    </form>
+                </div>
+            </div>
+            <div th:if="${productsSize > 0}">
+                <a th:if="${currentPage - 1 >= 0}" th:href="@{/public/products}+'?page='+${currentPage - 1}">previous</a>
+                <a th:if="${currentPage < totalPages - 1}" th:href="@{/public/products}+'?page='+${currentPage + 1}">next</a>
+            </div>
+            <span th:if="${productsSize == 0}">Nenhum produto encontrado!</span>
+        </div>
+
+    </body>
+</html>

@@ -3,30 +3,15 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:replace="~{fragments/head-fragments :: css-bootstrap}">
+        <link th:replace="~{fragments/head-fragments :: containers-css}">
     </head>
     <body>
-        <table>
-            <thead>
-                <tr>
-                    <th>imagem</th>
-                    <th>nome</th>
-                    <th>preço</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="product : ${products}">
-                    <td>
-                        <img th:attr="src='/static/images/'+${product.sku}+'.png'" height="50px" width="100px" alt="">
-                    </td>
-                    <td th:text="${product.name}"></td>
-                    <td th:text="${product.price}"></td>
-                    <td>
-                        <form th:attr="action=@{/public/product/}+${product.sku}" method="get">
-                            <button type="submit">Conferir</button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <header th:replace="~{fragments/header-fragments :: public-header}"></header>
+        <main class="main-container">
+            <div class="mt-2">
+                <div th:replace="~{fragments/body-fragments :: products-list}"></div>
+            </div>
+        </main>
     </body>
 </html>
