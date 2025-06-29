@@ -3,17 +3,25 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:replace="~{fragments/head-fragments :: css-bootstrap}">
+        <link th:replace="~{fragments/head-fragments :: containers-css}">
     </head>
     <body>
-        <div>
-            <div th:if="${product} != null" th:object="${product}">
-                <img th:attr="src='/static/images/'+*{sku}+'.png'" height="50px" width="100px" alt="">
-                <h2 th:text="*{name}"></h2>
-                <h3 th:text="*{price}"></h3>
-                <p th:text="*{description}"></p>
-                <form th:attr="action=@{/client/pay/}+*{sku}" method="get">
-                    <button type="submit">comprar</button>
-                </form>
+        <header th:replace="~{fragments/header-fragments :: public-header}"></header>
+            <div class="container row-cols-1" th:if="${product} != null" th:object="${product}">
+                <div class="row row-cols-2">
+                    <div class="product-image-container">
+                        <img class="product-image" th:attr="src='/static/images/'+*{sku}+'.png'" height="300px" width="300px" alt="">
+                    </div>
+                    <div class="container row-cols-1">
+                        <h2 th:text="*{name}"></h2>
+                        <h3 th:text="*{price}"></h3>
+                        <form th:attr="action=@{/client/pay/}+*{sku}" method="get">
+                            <button type="submit">comprar</button>
+                        </form>
+                        <p th:text="*{description}"></p>
+                    </div>
+                </div>
             </div>
             <span th:if="${productIsFound} != null" th:text="(${productIsFound} == true)? 'Produto não encontrado!' : 'Produto não encontrado!'"></span>
         </div>
