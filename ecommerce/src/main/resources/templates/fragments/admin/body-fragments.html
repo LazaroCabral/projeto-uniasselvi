@@ -25,9 +25,15 @@
                     </div>
                     <p th:text="${product.name}"></p>
                     <p th:text="${product.price}"></p>
-                    <form th:attr="action=@{/admin/update-product/}+${product.sku}" method="get">
-                        <button class="btn btn-primary" type="submit">Atualizar</button>
-                    </form>
+                    <div class="row row-cols-2">
+                        <form th:attr="action=@{/admin/update-product/}+${product.sku}" method="get">
+                            <button class="btn btn-primary" type="submit">Atualizar</button>
+                        </form>
+                        <form th:attr="action=@{/admin/delete-product/}+${product.sku}" method="get">
+                            <input type="hidden" name="search-name" th:value="(${searchName != null}? ${searchName} : '')">
+                            <button class="btn btn-primary" type="submit">Deletar</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div th:if="${productsSize > 0}">
