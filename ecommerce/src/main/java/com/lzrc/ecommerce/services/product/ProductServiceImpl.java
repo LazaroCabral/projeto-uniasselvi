@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void reduceStock(String sku, Long quantity) throws ProductNotFoundException, InsufficientStockException {
-        Optional<Product> productOptional = productRepository.findById(sku);
+        Optional<Product> productOptional = customProductRepository.findByIdWithWriteLock(sku);
         if(productOptional.isPresent()){
             Product product = productOptional.get();
             hasSufficientStock(product, quantity);

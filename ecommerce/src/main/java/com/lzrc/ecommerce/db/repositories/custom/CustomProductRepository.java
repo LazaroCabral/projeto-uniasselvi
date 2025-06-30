@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +22,7 @@ public interface CustomProductRepository extends CrudRepository<Product,String>{
      Page<ProductRecordResponse> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
      @Lock(LockModeType.PESSIMISTIC_WRITE)
-     Optional<Product> findById(String sku);
+     @Query("SELECT p FROM Product p WHERE p.sku = ?1")
+     Optional<Product> findByIdWithWriteLock(String sku);
 
 }
