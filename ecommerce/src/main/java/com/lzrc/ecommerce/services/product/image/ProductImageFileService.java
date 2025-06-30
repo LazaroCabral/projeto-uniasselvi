@@ -25,19 +25,40 @@ public class ProductImageFileService {
         }
     }
 
-    public boolean saveImage(MultipartFile image, String sku) throws InvalidImageFormatException, SaveImageException {
-        imageIsValid(image);
-        String saveImage = imagesPath.concat("/").concat(sku).concat(".png");
+    private File getImageFile(String sku){
+        String imageString = imagesPath.concat("/").concat(sku).concat(".png");
+        return new File(imageString);
+    }
+
+    private void writeImage(byte[] productImage,File file) throws SaveImageException{
         try {
-            byte[] productImage = image.getBytes();
-            File file=new File(saveImage);
-            file.createNewFile();
             FileOutputStream writer=new FileOutputStream(file);
             writer.write(productImage);
             writer.flush();
             writer.close();
-            return true;
         } catch (IOException e) {
+            e.printStackTrace();
+            throw new SaveImageException();
+        }
+
+    }
+
+    private void createImage(byte[] image, File imageFile) throws SaveImageException{
+        try {
+            imageFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new SaveImageException();
+        }
+        writeImage(image, imageFile);
+    }
+
+    public void saveImage(MultipartFile image, String sku) throws InvalidImageFormatException, SaveImageException {
+        imageIsValid(image);
+        try {
+            createImage(image.getBytes(), getImageFile(sku));
+        } catch (SaveImageException | IOException e) {
+            e.printStackTrace();
             throw new SaveImageException();
         }
     }
