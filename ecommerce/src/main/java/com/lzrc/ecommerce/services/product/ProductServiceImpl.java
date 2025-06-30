@@ -10,11 +10,11 @@ import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
-import com.lzrc.ecommerce.services.product.exceptions.InvalidImageFormatException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductAlreadyExistsException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
-import com.lzrc.ecommerce.services.product.exceptions.SaveImageException;
 import com.lzrc.ecommerce.services.product.image.ProductImageFileService;
+import com.lzrc.ecommerce.services.product.image.exceptions.InvalidImageFormatException;
+import com.lzrc.ecommerce.services.product.image.exceptions.SaveImageException;
 
 @Service
 public class ProductServiceImpl implements ProductService {

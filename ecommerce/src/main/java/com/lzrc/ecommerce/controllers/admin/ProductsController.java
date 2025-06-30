@@ -23,10 +23,10 @@ import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.records.ProductRecord;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.product.ProductService;
-import com.lzrc.ecommerce.services.product.exceptions.InvalidImageFormatException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductAlreadyExistsException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
-import com.lzrc.ecommerce.services.product.exceptions.SaveImageException;
+import com.lzrc.ecommerce.services.product.image.exceptions.InvalidImageFormatException;
+import com.lzrc.ecommerce.services.product.image.exceptions.SaveImageException;
 
 import jakarta.validation.Valid;
 
