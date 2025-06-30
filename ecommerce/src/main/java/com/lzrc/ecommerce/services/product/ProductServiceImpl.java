@@ -1,12 +1,8 @@
 package com.lzrc.ecommerce.services.product;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,13 +14,14 @@ import com.lzrc.ecommerce.services.product.exceptions.InvalidImageFormatExceptio
 import com.lzrc.ecommerce.services.product.exceptions.ProductAlreadyExistsException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.exceptions.SaveImageException;
+import com.lzrc.ecommerce.services.product.image.ProductImageFileService;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    @Value("${products.image.files.path}")
-    String imagesPath;
-
+    @Autowired
+    ProductImageFileService productImageFileService;
+    
     @Autowired
     ProductRepository productRepository;
 
@@ -38,44 +35,10 @@ public class ProductServiceImpl implements ProductService {
         } else{throw new InsufficientStockException();}
     }
 
-    private void imageIsValid(MultipartFile image) throws InvalidImageFormatException {
-        String productImageName = image.getOriginalFilename();
-        if(productImageName == null || 
-            productImageName.matches("^.*?(\\.png)") == false){
-            throw new InvalidImageFormatException();
-        }
-    }
-
-    private boolean saveImage(byte[] productImage, String sku){
-        String saveImage = imagesPath.concat("/").concat(sku).concat(".png");
-        try {
-            File file=new File(saveImage);
-            file.createNewFile();
-            FileOutputStream writer=new FileOutputStream(file);
-            writer.write(productImage);
-            writer.flush();
-            writer.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     @Override
     public void saveProductImage(MultipartFile image, Product product) throws SaveImageException, InvalidImageFormatException {
-        imageIsValid(image);
-        boolean isSaved;
-        try {
-            isSaved = saveImage(image.getBytes(), product.getSku());
-        } catch (IOException e) {
-            throw new SaveImageException();
-        }
-        if(isSaved!=true){
-            throw new SaveImageException();
-        }
+        productImageFileService.saveImage(image, product.getSku());
     }
-
 
     @Override
     public void insert(Product product) throws ProductAlreadyExistsException {
