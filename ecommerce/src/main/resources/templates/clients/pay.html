@@ -23,7 +23,7 @@
             <div th:if="${buySuccess} != null">
                 <span th:text="(${buySuccess})? 'Compra efetuada com sucesso!' : 'Não foi possivel efetuar a compra!' "></span>
                 <div th:if="${buySuccess} == false">
-                    <span th:if="${productdNotFound} != null" th:text="(${productdNotFound})? 'Produto não encontrado!' : '' "></span>
+                    <span th:if="${productNotFound} != null" th:text="(${productNotFound})? 'Produto não encontrado!' : '' "></span>
                     <span th:if="${insufficientBalance} != null" th:text="(${insufficientBalance})? 'Saldo insuficiente!' : '' "></span>
                     <span th:if="${insufficientStock} != null" th:text="(${insufficientStock})? 'Estoque insuficiente!' : '' "></span>
                 </div>
