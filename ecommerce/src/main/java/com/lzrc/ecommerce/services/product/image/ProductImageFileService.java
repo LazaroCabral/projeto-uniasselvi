@@ -56,7 +56,12 @@ public class ProductImageFileService {
     public void saveImage(MultipartFile image, String sku) throws InvalidImageFormatException, SaveImageException {
         imageIsValid(image);
         try {
-            createImage(image.getBytes(), getImageFile(sku));
+            File imageFile=getImageFile(sku);
+            if(imageFile.exists()){
+                writeImage(image.getBytes(), imageFile);
+            }else{
+                createImage(image.getBytes(), imageFile);
+            }
         } catch (SaveImageException | IOException e) {
             e.printStackTrace();
             throw new SaveImageException();
