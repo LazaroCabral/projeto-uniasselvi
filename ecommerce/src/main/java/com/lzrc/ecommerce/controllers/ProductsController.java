@@ -46,7 +46,7 @@ public class ProductsController {
             Product product = productOptinal.get();
             ProductRecordResponse productRecordResponse = new ProductRecordResponse(
                 product.getSku(), product.getName(), product.getDescription()
-                , product.getPrice());
+                , product.getPrice(), product.getAvailableStock());
             mv.addObject("product", productRecordResponse);
         } else {
             mv.addObject("productIsFound", Boolean.FALSE);

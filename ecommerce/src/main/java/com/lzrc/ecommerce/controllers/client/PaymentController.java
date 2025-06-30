@@ -30,7 +30,7 @@ public class PaymentController {
             Product product = productPurchaseService.holdProduct(sku);
             mv.addObject("product", 
                 new ProductRecordResponse(product.getSku(), product.getName(), 
-                    product.getDescription(), product.getPrice()));
+                    product.getDescription(), product.getPrice(), product.getAvailableStock()));
             mv.addObject("success", Boolean.TRUE);
         } catch (ProductNotFoundException e) {
             e.printStackTrace();

@@ -6,6 +6,7 @@ public record ProductRecordResponse(
     String sku,
     String name,
     String description,
-    BigDecimal price) {
+    BigDecimal price,
+    Long availableStock) {
 
 }
