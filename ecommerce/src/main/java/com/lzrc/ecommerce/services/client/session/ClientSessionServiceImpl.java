@@ -11,16 +11,11 @@ import com.lzrc.ecommerce.services.client.exceptions.ClientNotFoundException;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 import com.lzrc.ecommerce.services.client.session.exceptions.ClientSessionIsInvalidException;
 
-import jakarta.servlet.http.HttpSession;
-
 @Service
 public class ClientSessionServiceImpl implements ClientSessionService{
 
     @Autowired
     ClientService clientService;
-
-    @Autowired
-    HttpSession session;
 
     @Override
     public void debit(BigDecimal value) throws InsufficientBalanceException {
