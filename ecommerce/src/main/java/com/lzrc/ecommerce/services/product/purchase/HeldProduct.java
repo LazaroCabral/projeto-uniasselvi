@@ -10,5 +10,6 @@ import lombok.Getter;
 public class HeldProduct {
 
     Product product;
+    Long heldAt;
 
 }

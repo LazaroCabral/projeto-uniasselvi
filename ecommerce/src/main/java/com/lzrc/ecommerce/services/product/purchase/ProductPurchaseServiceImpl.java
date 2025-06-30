@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,9 +34,16 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
     @Autowired
     HttpSession session;
 
+    @Value("${products.held-product-time-limit}")
+    Long heldProductTimeLimit;
+
     private boolean validateHeldProduct(String sku, HeldProduct heldProduct){
         if(heldProduct != null && 
             heldProduct.getProduct().getSku().equals(sku)){
+                Long heldProductTime = System.currentTimeMillis() - heldProduct.getHeldAt();
+                if (heldProductTime > heldProductTimeLimit) {
+                    return false;
+                }
                 return true;
             } else {return false;}
     }
@@ -57,7 +65,7 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
         Optional<Product> optionalProduct =  productRepository.findById(sku);
         if(optionalProduct.isPresent()){
             Product product = optionalProduct.get();
-            HeldProduct heldProduct = new HeldProduct(product);
+            HeldProduct heldProduct = new HeldProduct(product, System.currentTimeMillis());
             session.setAttribute("heldProduct", heldProduct);
             return product;
 

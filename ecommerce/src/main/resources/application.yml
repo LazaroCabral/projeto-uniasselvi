@@ -2,6 +2,7 @@ products:
   image:
     files:
       path: ${PRODUCTS_IMAGES}
+  held-product-time-limit: 10000
 
 spring:
   application:
