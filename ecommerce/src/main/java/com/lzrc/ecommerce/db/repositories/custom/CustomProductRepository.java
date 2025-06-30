@@ -18,6 +18,8 @@ public interface CustomProductRepository extends CrudRepository<Product,String>{
 
      Page<ProductRecordResponse> findAll(Pageable pageable);
 
+     Page<ProductRecordResponse> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
      @Lock(LockModeType.PESSIMISTIC_WRITE)
      Optional<Product> findById(String sku);
 

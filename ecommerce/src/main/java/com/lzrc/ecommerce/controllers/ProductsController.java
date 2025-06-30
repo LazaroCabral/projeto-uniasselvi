@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lzrc.ecommerce.db.entities.Product;
@@ -27,10 +28,14 @@ public class ProductsController {
     CustomProductRepository customProductRepository;
 
     @GetMapping("/products")
-    public ModelAndView home(Pageable pageable){
+    public ModelAndView home(Pageable pageable, @RequestParam(required = false) String name){
         ModelAndView mv = new ModelAndView("products.html");
-        Page<ProductRecordResponse> products = customProductRepository
-            .findAll(pageable);
+        Page<ProductRecordResponse> products;
+        if(name != null){
+             products = customProductRepository.findByNameContainingIgnoreCase(name, pageable);
+        } else{
+            products = customProductRepository.findAll(pageable);
+        }
         mv.addObject("currentPage", products.getNumber());
         mv.addObject("totalPages", products.getTotalPages());
         mv.addObject("productsSize", products.getNumberOfElements());

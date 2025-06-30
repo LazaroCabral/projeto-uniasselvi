@@ -2,6 +2,21 @@
 <html>
     <body>
 
+        <div th:fragment="search-products">
+            <div class="container row-cols-1">
+                <form th:action="@{/public/products}" method="get">
+                    <div class="row">
+                        <div class="col">
+                            <input name="name" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="container" th:fragment="products-list">
             <div class="row row-cols-4" th:if="${products} != null">
                 <div class="row row-cols-1" th:each="product : ${products}">
