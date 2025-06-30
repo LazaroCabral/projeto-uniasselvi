@@ -15,6 +15,8 @@ public interface ProductService {
 
     void insert(Product product) throws ProductAlreadyExistsException;
 
+    void update(Product product) throws ProductNotFoundException;
+
     void reduceStock(String sku,Long quantity) throws ProductNotFoundException , InsufficientStockException;
 
 }

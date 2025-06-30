@@ -86,6 +86,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void update(Product product) throws ProductNotFoundException {
+        boolean productExists = productRepository.existsById(product.getSku());
+        if(productExists){
+            productRepository.save(product);
+        } else {throw new ProductNotFoundException();}
+    }
+
+    @Override
     public void reduceStock(String sku, Long quantity) throws ProductNotFoundException, InsufficientStockException {
         Optional<Product> productOptional = productRepository.findById(sku);
         if(productOptional.isPresent()){
