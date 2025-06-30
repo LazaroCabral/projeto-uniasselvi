@@ -44,10 +44,15 @@ public class ProductsController {
     ProductService productService;
 
     @GetMapping("/products")
-    public ModelAndView home(Pageable pageable){
+    public ModelAndView home(Pageable pageable, @RequestParam(required = false) String name){
         ModelAndView mv = new ModelAndView("admin/products/products.html");
-        Page<ProductRecordResponse> products = customProductRepository
-            .findAll(pageable);
+        Page<ProductRecordResponse> products;
+        if(name != null){
+            products = customProductRepository.findByNameContainingIgnoreCase(name, pageable);
+             mv.addObject("searchName", name);
+        } else {
+            products = customProductRepository.findAll(pageable);
+        }
         mv.addObject("currentPage", products.getNumber());
         mv.addObject("totalPages", products.getTotalPages());
         mv.addObject("productsSize", products.getNumberOfElements());
