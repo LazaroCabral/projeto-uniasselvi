@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:replace="~{fragments/head-fragments :: css-bootstrap}">
+        <link th:replace="~{fragments/head-fragments :: containers-css}">
+    </head>
+    <body>
+        <header th:replace="~{fragments/header-fragments :: public-header}"></header>
+        <form th:if="${product} != null" th:object="${product}" method="post" th:attr="action=@{/admin/update-product}" enctype="multipart/form-data">
+            <label for="product-image">imagem do produto:</label>
+            <input id="product-image" type="file" name="product-image">
+            <input id="sku" type="hidden" name="sku" th:value="*{sku}">
+            <label for="name">nome:</label>
+            <input th:field="*{name}" type="text">
+            <label for="description">descrição:</label>
+            <textarea th:field="*{description}"></textarea>
+            <label for="price">preço:</label>
+            <input th:field="*{price}" type="text">
+            <label for="availableStock">estoque disponivel:</label>
+            <input th:field="*{availableStock}" type="number">
+            <button type="submit">Atualizar produto</button>
+        </form>
+        <div th:if="${success} != null">
+            <span th:if="${imageIsSaved} != null" th:text="(${imageIsSaved} == false)? 'A imagem não pode ser salva!':''"></span>
+            <span th:if="${invalidImageFormat} != null" th:text="(${invalidImageFormat})? 'Formato de imagem invalido!':''"></span>
+            <div th:if="${success} == false">
+                <span th:if="${productNotFound} != null" th:text="(${productNotFound} == true)? 'Produto não encontrado!' : ''"></span>
+                <span th:if="${productAlreadyExists} != null and ${productAlreadyExists} == true">O produto já existe!</span>
+            </div>
+        </div>
+        <div th:if="${productRecord} != null" th:object="${productRecord}">
+            <p th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></p>
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+            <p th:if="${#fields.hasErrors('availableStock')}" th:errors="*{availableStock}"></p>
+        </div>
+    </body>
+</html>
