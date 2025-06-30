@@ -31,8 +31,8 @@
                 </div>
             </div>
             <div th:if="${productsSize > 0}">
-                <a th:if="${currentPage - 1 >= 0}" th:href="@{/public/products}+'?page='+${currentPage - 1}">previous</a>
-                <a th:if="${currentPage < totalPages - 1}" th:href="@{/public/products}+'?page='+${currentPage + 1}">next</a>
+                <a th:if="${currentPage - 1 >= 0}" th:href="@{/public/products}+'?page='+${currentPage - 1}+(${searchName != null}? 'name='+${searchName} : '')">previous</a>
+                <a th:if="${currentPage < totalPages - 1}" th:href="@{/public/products}+'?page='+${currentPage + 1}+(${searchName != null}? 'name='+${searchName} : '')">next</a>
             </div>
             <span th:if="${productsSize == 0}">Nenhum produto encontrado!</span>
         </div>

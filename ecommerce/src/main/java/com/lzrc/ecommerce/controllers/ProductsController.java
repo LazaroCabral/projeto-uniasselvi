@@ -33,6 +33,7 @@ public class ProductsController {
         Page<ProductRecordResponse> products;
         if(name != null){
              products = customProductRepository.findByNameContainingIgnoreCase(name, pageable);
+             mv.addObject("searchName", name);
         } else{
             products = customProductRepository.findAll(pageable);
         }
