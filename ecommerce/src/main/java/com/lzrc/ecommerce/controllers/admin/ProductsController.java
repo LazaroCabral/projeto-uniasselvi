@@ -17,6 +17,7 @@ import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.records.ProductRecord;
 import com.lzrc.ecommerce.services.product.ProductService;
 import com.lzrc.ecommerce.services.product.exceptions.InvalidImageFormatException;
+import com.lzrc.ecommerce.services.product.exceptions.ProductAlreadyExistsException;
 import com.lzrc.ecommerce.services.product.exceptions.SaveImageException;
 
 import jakarta.validation.Valid;
@@ -49,7 +50,13 @@ public class ProductsController {
         Product product = new Product(productRecord.sku(), productRecord.name(), 
             productRecord.description(), productRecord.price(), productRecord.availableStock());
 
-        productService.save(product);
+        try {
+            productService.insert(product);
+        } catch (ProductAlreadyExistsException e) {
+            mv.addObject("productAlreadyExists", Boolean.TRUE);
+            mv.addObject("success", Boolean.FALSE);
+            return mv;
+        }
         
         if(productImage.isEmpty() == false) {
             try {

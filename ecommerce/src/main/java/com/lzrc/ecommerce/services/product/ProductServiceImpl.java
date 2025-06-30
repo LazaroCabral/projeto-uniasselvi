@@ -15,6 +15,7 @@ import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
 import com.lzrc.ecommerce.services.product.exceptions.InvalidImageFormatException;
+import com.lzrc.ecommerce.services.product.exceptions.ProductAlreadyExistsException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.exceptions.SaveImageException;
 
@@ -75,9 +76,13 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+
     @Override
-    public void save(Product product) {
-        productRepository.save(product);
+    public void insert(Product product) throws ProductAlreadyExistsException {
+        boolean productAlreadyExists = productRepository.existsById(product.getSku());
+        if(productAlreadyExists){
+            throw new ProductAlreadyExistsException();
+        } else {productRepository.save(product);}
     }
 
     @Override
