@@ -3,8 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:replace="~{fragments/head-fragments :: css-bootstrap}">
+        <link th:replace="~{fragments/head-fragments :: containers-css}">
     </head>
     <body>
+        <header th:replace="~{fragments/header-fragments :: public-header}"></header>
         <div>
             <h1>Comprar produto</h1>
             <div th:if="${product} != null" th:object="${product}">

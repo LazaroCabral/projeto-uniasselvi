@@ -3,8 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:replace="~{fragments/head-fragments :: css-bootstrap}">
+        <link th:replace="~{fragments/head-fragments :: containers-css}">
     </head>
     <body>
+        <header th:replace="~{fragments/header-fragments :: public-header}"></header>
         <form method="post" th:attr="action=@{/admin/add-product}" enctype="multipart/form-data">
             <label for="product-image">imagem do produto:</label>
             <input id="product-image" type="file" name="product-image">
