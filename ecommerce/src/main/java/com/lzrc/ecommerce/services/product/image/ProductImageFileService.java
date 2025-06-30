@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lzrc.ecommerce.services.product.exceptions.InvalidImageFormatException;
-import com.lzrc.ecommerce.services.product.exceptions.SaveImageException;
+import com.lzrc.ecommerce.services.product.image.exceptions.InvalidImageFormatException;
+import com.lzrc.ecommerce.services.product.image.exceptions.SaveImageException;
 
 @Service
 public class ProductImageFileService {
@@ -63,4 +63,11 @@ public class ProductImageFileService {
         }
     }
     
+    public void deleteImageIfExists(String sku){
+        File imageFile = getImageFile(sku);
+        if(imageFile.exists()){
+            imageFile.delete();
+        }
+    }
+
 }

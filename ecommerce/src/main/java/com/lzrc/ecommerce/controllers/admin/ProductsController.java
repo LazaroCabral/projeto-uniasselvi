@@ -150,5 +150,15 @@ public class ProductsController {
         return mv;
     }
 
+    @GetMapping("/delete-product/{sku}")
+    public String deleteProduct(@PathVariable String sku, @RequestParam(name = "search-name" , required = false) String searchName){
+        productService.delete(sku);
+        if(searchName != null){
+            return "redirect:/admin/products?name=".concat(searchName);
+        } else{
+            return "redirect:/admin/products";
+        }
+    }
+
 
 }

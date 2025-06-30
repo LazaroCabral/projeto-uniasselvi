@@ -66,4 +66,10 @@ public class ProductServiceImpl implements ProductService {
         } else {throw new ProductNotFoundException();}
     }
 
+    @Override
+    public void delete(String sku) {
+        productRepository.deleteById(sku);
+        productImageFileService.deleteImageIfExists(sku);
+    }
+
 }
