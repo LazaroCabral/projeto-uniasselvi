@@ -12,30 +12,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lzrc.ecommerce.db.entities.Product;
-import com.lzrc.ecommerce.db.repositories.ProductRepository;
-import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
+import com.lzrc.ecommerce.services.product.ProductService;
 
 @Controller("public-products-controller")
 @RequestMapping("/public")
 public class ProductsController {
 
     @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    CustomProductRepository customProductRepository;
+    ProductService productService;
 
     @GetMapping("/products")
     public ModelAndView home(Pageable pageable, @RequestParam(required = false) String name){
         ModelAndView mv = new ModelAndView("products.html");
         Page<ProductRecordResponse> products;
         if(name != null){
-             products = customProductRepository.findByNameContainingIgnoreCase(name, pageable);
+             products = productService.searchProducts(name, pageable);
              mv.addObject("searchName", name);
         } else{
-            products = customProductRepository.findAll(pageable);
+            products = productService.findAllProducts(pageable);
         }
         mv.addObject("currentPage", products.getNumber());
         mv.addObject("totalPages", products.getTotalPages());
@@ -47,13 +42,9 @@ public class ProductsController {
     @GetMapping("/product/{id}")
     public ModelAndView product(@PathVariable("id") String productId){
         ModelAndView mv = new ModelAndView("product.html");
-        Optional<Product> productOptinal=productRepository.findById(productId);
+        Optional<ProductRecordResponse> productOptinal=productService.findById(productId);
         if(productOptinal.isPresent()){
-            Product product = productOptinal.get();
-            ProductRecordResponse productRecordResponse = new ProductRecordResponse(
-                product.getSku(), product.getName(), product.getDescription()
-                , product.getPrice(), product.getAvailableStock());
-            mv.addObject("product", productRecordResponse);
+            mv.addObject("product", productOptinal.get());
         } else {
             mv.addObject("productIsFound", Boolean.FALSE);
         }

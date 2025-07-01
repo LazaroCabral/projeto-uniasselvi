@@ -6,16 +6,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.Repository;
 
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 
 import jakarta.persistence.LockModeType;
 
-@Repository
-public interface CustomProductRepository extends CrudRepository<Product,String>{
+@org.springframework.stereotype.Repository
+public interface CustomProductRepository extends Repository<Product,String>{
+
+     Optional<ProductRecordResponse> findById(String sku);     
 
      Page<ProductRecordResponse> findAll(Pageable pageable);
 

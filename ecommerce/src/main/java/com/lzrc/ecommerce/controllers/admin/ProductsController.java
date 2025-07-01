@@ -18,8 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lzrc.ecommerce.db.entities.Product;
-import com.lzrc.ecommerce.db.repositories.ProductRepository;
-import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.records.ProductRecord;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.product.ProductService;
@@ -35,12 +33,6 @@ import jakarta.validation.Valid;
 public class ProductsController {
 
     @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    CustomProductRepository customProductRepository;
-
-    @Autowired
     ProductService productService;
 
     @GetMapping("/products")
@@ -48,10 +40,10 @@ public class ProductsController {
         ModelAndView mv = new ModelAndView("admin/products/products.html");
         Page<ProductRecordResponse> products;
         if(name != null){
-            products = customProductRepository.findByNameContainingIgnoreCase(name, pageable);
+            products = productService.searchProducts(name, pageable);
              mv.addObject("searchName", name);
         } else {
-            products = customProductRepository.findAll(pageable);
+            products = productService.findAllProducts(pageable);
         }
         mv.addObject("currentPage", products.getNumber());
         mv.addObject("totalPages", products.getTotalPages());
@@ -104,14 +96,10 @@ public class ProductsController {
     public ModelAndView updateProduct(@PathVariable String sku){
         ModelAndView mv = new ModelAndView("admin/products/update-product.html");
 
-        Optional<Product> optionalProduct = productRepository.findById(sku);
+        Optional<ProductRecordResponse> optionalProduct = productService.findById(sku);
 
         if(optionalProduct.isPresent()){
-            Product product = optionalProduct.get();
-            ProductRecordResponse productRecordResponse = 
-                new ProductRecordResponse(
-                    product.getSku(), product.getName(), product.getDescription(), product.getPrice(), product.getAvailableStock());
-            mv.addObject("product", productRecordResponse);
+            mv.addObject("product", optionalProduct.get());
             mv.addObject("success", Boolean.TRUE);
         } else {
             mv.addObject("success", Boolean.FALSE);

@@ -3,12 +3,15 @@ package com.lzrc.ecommerce.services.product;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
+import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductAlreadyExistsException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
@@ -62,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
         if(productOptional.isPresent()){
             Product product = productOptional.get();
             hasSufficientStock(product, quantity);
-            customProductRepository.save(product);
+            productRepository.save(product);
         } else {throw new ProductNotFoundException();}
     }
 
@@ -70,6 +73,21 @@ public class ProductServiceImpl implements ProductService {
     public void delete(String sku) {
         productRepository.deleteById(sku);
         productImageFileService.deleteImageIfExists(sku);
+    }
+
+    @Override
+    public Page<ProductRecordResponse> findAllProducts(Pageable pageable) {
+        return customProductRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<ProductRecordResponse> searchProducts(String name, Pageable pageable) {
+        return customProductRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
+
+    @Override
+    public Optional<ProductRecordResponse> findById(String sku) {
+        return customProductRepository.findById(sku);
     }
 
 }
