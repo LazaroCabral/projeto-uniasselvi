@@ -12,5 +12,10 @@ public class LoginController {
     public String adminLogin(){
         return "admin/login.html";
     }
+
+    @GetMapping("/login-success")
+    public String adminLoginPost(){
+        return "redirect:/admin/products";
+    }
     
 }

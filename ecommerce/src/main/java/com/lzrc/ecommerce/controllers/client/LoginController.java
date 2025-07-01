@@ -13,4 +13,9 @@ public class LoginController {
         return "clients/login.html";
     }
 
+    @GetMapping("/login-success")
+    public String loginSuccess(){
+        return "redirect:/public/products";
+    }
+
 }

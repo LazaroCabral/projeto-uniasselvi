@@ -30,7 +30,9 @@ public class AdminFilter {
         )
         .csrf(csrf -> csrf.disable())
         .formLogin(form -> 
-            form.loginPage("/admin/login").permitAll()).
+            form.loginPage("/admin/login")
+            .defaultSuccessUrl("/admin/login-success")
+            .permitAll()).
         userDetailsService(userDetailsService());
         return http.build();
     }

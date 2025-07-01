@@ -39,7 +39,8 @@ public class ClientsFilter {
                 .anyRequest().hasRole("CLIENT")
         )
         .csrf(csrf -> csrf.disable())
-        .formLogin(form -> form.loginPage("/client/login").permitAll())
+        .formLogin(form -> form.loginPage("/client/login")
+            .defaultSuccessUrl("/client/login-success").permitAll())
         .logout( logout -> logout.logoutUrl("/client/logout"))
         .userDetailsService(clientDetails());
 
