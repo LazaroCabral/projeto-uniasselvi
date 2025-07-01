@@ -23,7 +23,7 @@
             <div th:if="${buySuccess} != null">
                 <span th:text="(${buySuccess})? 'Compra efetuada com sucesso!' : 'Não foi possivel efetuar a compra!' "></span>
                 <div th:replace="~{fragments/body-fragments :: error-messages}"></div>
-                <div th:replace="~{fragments/body-fragments :: warning-messages}"></div>>
+                <div th:replace="~{fragments/body-fragments :: warning-messages}"></div>
                 <span>
                     <form th:attr="action=@{/public/products}" method="get">
                         <button type="submit">voltar a pagina de produtos</button>
