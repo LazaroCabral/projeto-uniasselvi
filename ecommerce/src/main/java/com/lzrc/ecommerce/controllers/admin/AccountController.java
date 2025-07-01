@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lzrc.ecommerce.db.entities.Admin;
-import com.lzrc.ecommerce.db.repositories.AdminRepository;
 import com.lzrc.ecommerce.records.AdminRecord;
+import com.lzrc.ecommerce.services.admin.AdminService;
 
 import jakarta.validation.Valid;
 
@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 public class AccountController {
 
     @Autowired
-    AdminRepository adminRepository;
+    AdminService adminService;
 
     @GetMapping("/update-account")
     public String addAdminGet(){
@@ -32,10 +32,9 @@ public class AccountController {
         if(bindingResult.hasErrors()){
             return mv;
         }
-        Admin admin = new Admin(adminRecord.cpf(),
-            adminRecord.name(), "{noop}".concat(adminRecord.password()));
-        adminRepository.deleteAll();
-        adminRepository.save(admin);
+        Admin admin = new Admin(adminRecord.cpf(), 
+            adminRecord.name(), adminRecord.password());
+        adminService.update(admin);
         mv.addObject("success", Boolean.TRUE);
         return mv;
     }
