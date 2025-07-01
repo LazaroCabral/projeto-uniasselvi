@@ -1,7 +1,5 @@
 package com.lzrc.ecommerce.controllers.client;
 
-import java.math.BigDecimal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lzrc.ecommerce.db.entities.Client;
 import com.lzrc.ecommerce.records.ClientRecord;
 import com.lzrc.ecommerce.services.client.ClientService;
 import com.lzrc.ecommerce.services.client.exceptions.ClientAlreadyExistsException;
@@ -35,13 +32,9 @@ public class AccountController {
         if(bindingResult.hasErrors()){
             return mv;
         }
-        Client client = new Client(
-            clientRecord.cpf(),clientRecord.name(),
-            clientRecord.email(),
-            "{noop}".concat(clientRecord.password()),
-            BigDecimal.ZERO);
+        
         try {
-            clientService.insert(client);
+            clientService.insert(clientRecord);
             mv.addObject("success", Boolean.TRUE);
         } catch (ClientAlreadyExistsException e) {
             mv.addObject("clientAlreadyExists", Boolean.TRUE);

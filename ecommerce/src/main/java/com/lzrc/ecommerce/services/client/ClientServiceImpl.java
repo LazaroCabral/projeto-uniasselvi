@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.lzrc.ecommerce.db.entities.Client;
 import com.lzrc.ecommerce.db.repositories.ClientRepository;
 import com.lzrc.ecommerce.db.repositories.custom.CustomClientRepository;
+import com.lzrc.ecommerce.records.ClientRecord;
 import com.lzrc.ecommerce.services.client.exceptions.ClientAlreadyExistsException;
 import com.lzrc.ecommerce.services.client.exceptions.ClientNotFoundException;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
@@ -31,9 +32,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void insert(Client client) throws ClientAlreadyExistsException {
-        boolean clientExists=clientRepository.existsById(client.getCpf());
+    public void insert(ClientRecord clientRecord) throws ClientAlreadyExistsException {
+        boolean clientExists=clientRepository.existsById(clientRecord.cpf());
         if(clientExists == false){
+            Client client = new Client( clientRecord.cpf(),
+                clientRecord.name(),
+                 clientRecord.email(),
+                "{noop}".concat(clientRecord.password()),
+                BigDecimal.ZERO);
             clientRepository.save(client);
         } else{
             throw new ClientAlreadyExistsException();
