@@ -32,10 +32,8 @@ public class ProductsController {
         } else{
             products = productService.findAllProducts(pageable);
         }
-        mv.addObject("currentPage", products.getNumber());
-        mv.addObject("totalPages", products.getTotalPages());
-        mv.addObject("productsSize", products.getNumberOfElements());
         mv.addObject("products", products.getContent());
+        mv.addObject("page", products);
         return mv;
     }
 
