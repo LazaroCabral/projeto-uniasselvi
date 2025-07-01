@@ -37,5 +37,13 @@
             <span th:if="${page.numberOfElements == 0}">Nenhum produto encontrado!</span>
         </div>
 
+        <div th:fragment="error-messages">
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <div th:fragment="warning-messages">
+            <span th:text="${warningMessage}"></span>
+        </div>
+
     </body>
 </html>

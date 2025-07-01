@@ -34,7 +34,7 @@ public class PaymentController {
             mv.addObject("success", Boolean.TRUE);
         } catch (ProductNotFoundException e) {
             e.printStackTrace();
-            mv.addObject("productNotFound", Boolean.TRUE);
+            mv.addObject("errorMessage", "Produto não encontrado!");
             mv.addObject("success", Boolean.FALSE);
         }
         return mv;
@@ -49,11 +49,11 @@ public class PaymentController {
             productPurchaseService.buyProduct(sku);
             mv.addObject("buySuccess", Boolean.TRUE);
         } catch (InsufficientBalanceException e) {
-            mv.addObject("insufficientBalance", Boolean.TRUE);
+            mv.addObject("errorMessage", "Saldo insuficiente!");
         } catch (ProductNotHeldException | ProductNotFoundException e ) {
-            mv.addObject("productNotFound", Boolean.TRUE);
+            mv.addObject("errorMessage", "Produto não encontrado ou expirado!");
         } catch (InsufficientStockException e) {
-            mv.addObject("insufficientStock", Boolean.TRUE);
+            mv.addObject("errorMessage", "Estoque insuficiente!");
         }
         
         return mv;
