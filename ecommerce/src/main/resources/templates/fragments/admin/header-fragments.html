@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <header th:fragment="public-header">
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary px-5">
+                <a class="navbar-brand">
+                    <img src="/static/site-images/carrinho-de-compras.png" width="30" height="30">
+                </a>
+                <a class="navbar-brand text-white">Ecommerce.net</a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" th:href="@{/admin/products}">Produtos</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+        </header>
+
+        <header th:fragment="authenticated-admin-header">
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary px-5">
+                <a class="navbar-brand">
+                    <img src="/static/site-images/carrinho-de-compras.png" width="30" height="30">
+                </a>
+                <a class="navbar-brand text-white">Ecommerce.net</a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" th:href="@{/admin/products}">Produtos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" th:href="@{/admin/update-account}">Atualizar conta</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </body>
+</html>

@@ -7,7 +7,7 @@
         <link th:replace="~{fragments/head-fragments :: containers-css}">
     </head>
     <body>
-        <header th:replace="~{fragments/header-fragments :: public-header}"></header>
+        <header th:replace="~{fragments/admin/header-fragments :: public-header}"></header>
         <h1>Admin Login</h1>
         <form method="post" th:attr="action=@{/admin/login}">
             <label for="username">cpf:</label>
