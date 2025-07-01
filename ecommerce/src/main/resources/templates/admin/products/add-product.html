@@ -24,9 +24,7 @@
             <button type="submit">Adicionar produto</button>
         </form>
         <span th:if="${success} != null" th:text="(${success} == true)? 'Produto cadastrado com sucesso!' : 'Houve um erro ao cadastrar o Produto!'"></span>
-        <span th:if="${imageIsSaved} != null" th:text="(${imageIsSaved} == false)? 'A imagem não pode ser salva!':''"></span>
-        <span th:if="${invalidImageFormat} != null" th:text="(${invalidImageFormat})? 'Formato de imagem invalido!':''"></span>
-        <span th:if="${productAlreadyExists} != null and ${productAlreadyExists} == true">O produto já existe!</span>
+        <div th:replace="~{fragments/body-fragments :: error-messages}"></div>
         <div th:if="${productRecord} != null" th:object="${productRecord}">
             <p th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></p>
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>

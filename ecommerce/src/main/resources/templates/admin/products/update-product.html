@@ -23,11 +23,9 @@
             <button type="submit">Atualizar produto</button>
         </form>
         <div th:if="${success} != null">
-            <span th:if="${imageIsSaved} != null" th:text="(${imageIsSaved} == false)? 'A imagem não pode ser salva!':''"></span>
-            <span th:if="${invalidImageFormat} != null" th:text="(${invalidImageFormat})? 'Formato de imagem invalido!':''"></span>
+            <div th:replace="~{fragments/body-fragments :: warning-messages}"></div>
             <div th:if="${success} == false">
-                <span th:if="${productNotFound} != null" th:text="(${productNotFound} == true)? 'Produto não encontrado!' : ''"></span>
-                <span th:if="${productAlreadyExists} != null and ${productAlreadyExists} == true">O produto já existe!</span>
+                <div th:replace="~{fragments/body-fragments :: error-messages}"></div>
             </div>
         </div>
         <div th:if="${productRecord} != null" th:object="${productRecord}">

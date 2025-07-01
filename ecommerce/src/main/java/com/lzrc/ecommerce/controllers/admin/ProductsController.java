@@ -71,7 +71,7 @@ public class ProductsController {
         try {
             productService.insert(product);
         } catch (ProductAlreadyExistsException e) {
-            mv.addObject("productAlreadyExists", Boolean.TRUE);
+            mv.addObject("errorMessage", "Um produto com este SKU já existe!");
             mv.addObject("success", Boolean.FALSE);
             return mv;
         }
@@ -81,9 +81,9 @@ public class ProductsController {
                 productService.saveProductImage(productImage, product);
                 mv.addObject("success", Boolean.TRUE);
             } catch (SaveImageException e) {
-                mv.addObject("imageIsSaved", Boolean.FALSE);
+                mv.addObject("errorMessage", "Não foi possivel salvar a imagem!");
             } catch (InvalidImageFormatException e) {
-                mv.addObject("invalidImageFormat", Boolean.TRUE);
+                mv.addObject("errorMessage", "O formato da imagem é invalido!");
             }
         }
         mv.addObject("success", Boolean.TRUE);
@@ -101,7 +101,7 @@ public class ProductsController {
             mv.addObject("success", Boolean.TRUE);
         } else {
             mv.addObject("success", Boolean.FALSE);
-            mv.addObject("productNotFound", Boolean.TRUE);
+            mv.addObject("errorMessage", "Produto não encontrado!");
         }
         return mv;
     }
@@ -122,7 +122,7 @@ public class ProductsController {
         try {
             productService.update(product);
         } catch (ProductNotFoundException e) {
-            mv.addObject("productNotFound", Boolean.TRUE);
+            mv.addObject("errorMessage", "Produto não encontrado!");
             mv.addObject("success", Boolean.FALSE);
             return mv;
         }
@@ -132,9 +132,9 @@ public class ProductsController {
                 productService.saveProductImage(productImage, product);
                 mv.addObject("success", Boolean.TRUE);
             } catch (SaveImageException e) {
-                mv.addObject("imageIsSaved", Boolean.FALSE);
+                mv.addObject("warningMessage", "A imagem não pode ser salva!");
             } catch (InvalidImageFormatException e) {
-                mv.addObject("invalidImageFormat", Boolean.TRUE);
+                mv.addObject("warningMessage", "O formato de imagem é invalido. A imagem não pode ser salva!");
             }
         }
         mv.addObject("success", Boolean.TRUE);
