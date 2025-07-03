@@ -8,6 +8,7 @@
     </head>
     <body>
         <header th:replace="~{fragments/admin/header-fragments :: authenticated-admin-header}"></header>
+        <h1>Atualizar produto</h1>
         <form th:if="${product} != null" th:object="${product}" method="post" th:attr="action=@{/admin/update-product}" enctype="multipart/form-data">
             <label for="product-image">imagem do produto:</label>
             <input id="product-image" type="file" name="product-image">

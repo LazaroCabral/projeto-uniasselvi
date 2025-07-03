@@ -8,6 +8,7 @@
     </head>
     <body>
         <header th:replace="~{fragments/admin/header-fragments :: authenticated-admin-header}"></header>
+        <h1>Atualizar dados do Administrador</h1>
         <form method="post" th:attr="action=@{/admin/update-account}">
             <label for="cpf">cpf:</label>
             <input id="cpf" type="text" name="cpf">

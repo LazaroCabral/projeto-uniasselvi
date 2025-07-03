@@ -8,6 +8,7 @@
     </head>
     <body>
         <header th:replace="~{fragments/admin/header-fragments :: authenticated-admin-header}"></header>
+        <h1>Adicionar produto</h1>
         <form method="post" th:attr="action=@{/admin/add-product}" enctype="multipart/form-data">
             <label for="product-image">imagem do produto:</label>
             <input id="product-image" type="file" name="product-image">
