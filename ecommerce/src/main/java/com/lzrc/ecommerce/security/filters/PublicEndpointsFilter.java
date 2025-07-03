@@ -27,7 +27,9 @@ public class PublicEndpointsFilter {
 
     @Bean
     SecurityFilterChain staticFilesFilterChain(HttpSecurity http) throws Exception{
-        http.authorizeHttpRequests(authorize -> authorize
+        http
+        .securityMatcher("/static/**")
+        .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HttpMethod.GET,
                 "/static/**")
                 .permitAll()
