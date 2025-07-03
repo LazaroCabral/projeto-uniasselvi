@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
+import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 import com.lzrc.ecommerce.services.client.session.ClientSessionService;
 import com.lzrc.ecommerce.services.product.ProductService;
@@ -61,13 +62,14 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
     }
 
     @Override
-    public Product holdProduct(String sku) throws ProductNotFoundException {
+    public ProductRecordResponse holdProduct(String sku) throws ProductNotFoundException {
         Optional<Product> optionalProduct =  productRepository.findById(sku);
         if(optionalProduct.isPresent()){
             Product product = optionalProduct.get();
             HeldProduct heldProduct = new HeldProduct(product, System.currentTimeMillis());
             session.setAttribute("heldProduct", heldProduct);
-            return product;
+            return new ProductRecordResponse(product.getSku(), product.getName(),
+                product.getDescription(), product.getPrice(), product.getAvailableStock());
 
         } else {throw new ProductNotFoundException();}
     }

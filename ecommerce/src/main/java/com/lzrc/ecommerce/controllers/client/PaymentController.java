@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
@@ -27,10 +26,8 @@ public class PaymentController {
     public ModelAndView paymentGet(@PathVariable String sku){
         ModelAndView mv = new ModelAndView("clients/pay.html");
         try {
-            Product product = productPurchaseService.holdProduct(sku);
-            mv.addObject("product", 
-                new ProductRecordResponse(product.getSku(), product.getName(), 
-                    product.getDescription(), product.getPrice(), product.getAvailableStock()));
+            ProductRecordResponse product = productPurchaseService.holdProduct(sku);
+            mv.addObject("product", product);
             mv.addObject("success", Boolean.TRUE);
         } catch (ProductNotFoundException e) {
             e.printStackTrace();
