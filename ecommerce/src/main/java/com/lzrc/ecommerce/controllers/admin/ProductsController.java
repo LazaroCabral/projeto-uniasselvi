@@ -83,7 +83,7 @@ public class ProductsController {
             } catch (SaveImageException e) {
                 mv.addObject("errorMessage", "Não foi possivel salvar a imagem!");
             } catch (InvalidImageFormatException e) {
-                mv.addObject("errorMessage", "O formato da imagem é invalido!");
+                mv.addObject("errorMessage", "O formato da imagem é invalido! O formato deve ser png!");
             }
         }
         mv.addObject("success", Boolean.TRUE);
