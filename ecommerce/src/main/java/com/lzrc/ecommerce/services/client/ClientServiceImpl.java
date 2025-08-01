@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lzrc.ecommerce.db.entities.Client;
@@ -23,6 +24,15 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     CustomClientRepository customClientRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    private void encodeClientPassword(Client client){
+        client.setPassword(
+            passwordEncoder.encode(client.getPassword())
+        );
+    }
+
     private void debit(Client client, BigDecimal value) throws InsufficientBalanceException{
         if(client.getAccountBalance().compareTo(value) >= 0){
             client.setAccountBalance(
@@ -38,8 +48,9 @@ public class ClientServiceImpl implements ClientService {
             Client client = new Client( clientRecord.cpf(),
                 clientRecord.name(),
                  clientRecord.email(),
-                "{noop}".concat(clientRecord.password()),
+                clientRecord.password(),
                 BigDecimal.ZERO);
+            encodeClientPassword(client);
             clientRepository.save(client);
         } else{
             throw new ClientAlreadyExistsException();
@@ -50,6 +61,7 @@ public class ClientServiceImpl implements ClientService {
     public void update(Client client) throws ClientNotFoundException {
         boolean clientExists = clientRepository.existsById(client.getCpf());
         if(clientExists){
+            encodeClientPassword(client);
             clientRepository.save(client);
         } else{
             throw new ClientNotFoundException();
