@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +16,7 @@ import com.lzrc.ecommerce.services.product.ProductService;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotHeldException;
+import com.lzrc.ecommerce.services.product.purchase.validators.HeldProductsValidator;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -35,18 +35,15 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
     @Autowired
     HttpSession session;
 
-    @Value("${products.held-product-time-limit}")
-    Long heldProductTimeLimit;
+    @Autowired
+    HeldProductsValidator heldProductsValidator;
 
     private boolean validateHeldProduct(String sku, HeldProduct heldProduct){
-        if(heldProduct != null && 
-            heldProduct.getProduct().getSku().equals(sku)){
-                Long heldProductTime = System.currentTimeMillis() - heldProduct.getHeldAt();
-                if (heldProductTime > heldProductTimeLimit) {
-                    return false;
-                }
-                return true;
-            } else {return false;}
+    if(heldProduct != null && 
+        heldProduct.getProduct().getSku().equals(sku) &&
+        heldProductsValidator.heldProductIsValid(heldProduct)){
+            return true;
+        } else {return false;}
     }
 
     @Transactional(rollbackFor = Exception.class)
