@@ -40,7 +40,7 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
 
     private boolean validateHeldProduct(String sku, HeldProduct heldProduct){
     if(heldProduct != null && 
-        heldProduct.getProduct().getSku().equals(sku) &&
+        heldProduct.skuIsEquals(sku) &&
         heldProductsValidator.heldProductIsValid(heldProduct)){
             return true;
         } else {return false;}

@@ -12,4 +12,8 @@ public class HeldProduct {
     Product product;
     Long heldAt;
 
+    public boolean skuIsEquals(String sku){
+        return product.getSku().equals(sku);
+    }
+
 }
