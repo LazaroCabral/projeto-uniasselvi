@@ -16,9 +16,9 @@ import com.lzrc.ecommerce.services.product.ProductService;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.exceptions.ProductNotHeldException;
+import com.lzrc.ecommerce.services.product.purchase.heldproducts.session.HeldProductsSessionStorage;
 import com.lzrc.ecommerce.services.product.purchase.validators.HeldProductsValidator;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ProductPurchaseServiceImpl implements ProductPurchaseService {
@@ -33,7 +33,7 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
     ClientSessionService clientSessionService;
 
     @Autowired
-    HttpSession session;
+    HeldProductsSessionStorage heldProductsSessionStorage;
 
     @Autowired
     HeldProductsValidator heldProductsValidator;
@@ -49,7 +49,7 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void buyProduct(String sku) throws InsufficientBalanceException, ProductNotHeldException, InsufficientStockException, ProductNotFoundException {
-        HeldProduct heldProduct = (HeldProduct) session.getAttribute("heldProduct");
+        HeldProduct heldProduct = heldProductsSessionStorage.getHeldProduct();
         if(validateHeldProduct(sku, heldProduct)){
             BigDecimal price = heldProduct.getProduct().getPrice();
             clientSessionService.debit(price);
@@ -64,7 +64,7 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
         if(optionalProduct.isPresent()){
             Product product = optionalProduct.get();
             HeldProduct heldProduct = new HeldProduct(product, System.currentTimeMillis());
-            session.setAttribute("heldProduct", heldProduct);
+            heldProductsSessionStorage.setHeldProductOnSession(heldProduct);
             return new ProductRecordResponse(product.getSku(), product.getName(),
                 product.getDescription(), product.getPrice(), product.getAvailableStock());
 
