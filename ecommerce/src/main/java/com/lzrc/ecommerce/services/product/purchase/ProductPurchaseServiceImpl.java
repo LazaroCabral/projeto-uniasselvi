@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lzrc.ecommerce.db.entities.Product;
+import com.lzrc.ecommerce.db.entities.PurchaseRecord;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
+import com.lzrc.ecommerce.db.repositories.PurchaseRecordsRepository;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 import com.lzrc.ecommerce.services.client.session.ClientSessionService;
@@ -25,6 +27,9 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    PurchaseRecordsRepository purchaseRecordsRepository;
 
     @Autowired
     ProductService productService;
@@ -46,6 +51,13 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
         } else {return false;}
     }
 
+    private void registryPurchase(HeldProduct heldProduct){
+        PurchaseRecord purchaseRecord = new PurchaseRecord(
+            clientSessionService.getActiveClient(), heldProduct.getSku(), heldProduct.getName(),
+            heldProduct.getPrice());
+        purchaseRecordsRepository.save(purchaseRecord);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void buyProduct(String sku) throws InsufficientBalanceException, ProductNotHeldException, InsufficientStockException, ProductNotFoundException {
@@ -54,6 +66,7 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
             BigDecimal price = heldProduct.getProduct().getPrice();
             clientSessionService.debit(price);
             productService.reduceStock(sku, 1L);
+            registryPurchase(heldProduct);
 
         } else {throw new ProductNotHeldException();}
     }

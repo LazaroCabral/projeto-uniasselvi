@@ -1,6 +1,7 @@
 package com.lzrc.ecommerce.services.client;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -18,5 +19,7 @@ public interface ClientService {
     void update(Client client) throws ClientNotFoundException;
 
     void debit(String cpf, BigDecimal value) throws InsufficientBalanceException, ClientNotFoundException;
+
+    Optional<Client> findById(String cpf);
 
 }

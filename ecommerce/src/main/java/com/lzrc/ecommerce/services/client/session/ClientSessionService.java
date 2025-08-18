@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 
+import com.lzrc.ecommerce.db.entities.Client;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 
 @Service
@@ -11,4 +12,6 @@ public interface ClientSessionService {
 
     void debit(BigDecimal value) throws InsufficientBalanceException;
 
+    Client getActiveClient();
+    
 }

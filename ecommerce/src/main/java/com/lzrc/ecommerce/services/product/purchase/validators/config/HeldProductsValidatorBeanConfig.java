@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import com.lzrc.ecommerce.services.product.purchase.HeldProduct;
@@ -18,6 +19,7 @@ public class HeldProductsValidatorBeanConfig {
     HeldProductTimeoutValidator heldProductTimeoutValidator;
 
     @Bean
+    @Primary
     public HeldProductsValidator productsValidator(){
         return new Builder()
             .addValidator(heldProductTimeoutValidator)
