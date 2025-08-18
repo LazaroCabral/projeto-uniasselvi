@@ -5,14 +5,16 @@ import java.math.BigDecimal;
 import com.lzrc.ecommerce.db.entities.Product;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
 @AllArgsConstructor
 public class HeldProduct {
 
-    Product product;
-    Long heldAt;
+    private Product product;
+    private Long heldAt;
+
+    public Long getHeldAt(){
+        return this.heldAt;
+    }
 
     public boolean skuIsEquals(String sku){
         return product.getSku().equals(sku);

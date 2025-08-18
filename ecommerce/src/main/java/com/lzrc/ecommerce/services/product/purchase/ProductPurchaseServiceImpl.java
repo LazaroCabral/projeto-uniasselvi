@@ -63,7 +63,7 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
     public void buyProduct(String sku) throws InsufficientBalanceException, ProductNotHeldException, InsufficientStockException, ProductNotFoundException {
         HeldProduct heldProduct = heldProductsSessionStorage.getHeldProduct();
         if(validateHeldProduct(sku, heldProduct)){
-            BigDecimal price = heldProduct.getProduct().getPrice();
+            BigDecimal price = heldProduct.getPrice();
             clientSessionService.debit(price);
             productService.reduceStock(sku, 1L);
             registryPurchase(heldProduct);
