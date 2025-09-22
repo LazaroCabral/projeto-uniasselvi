@@ -23,6 +23,7 @@
             <input th:field="*{availableStock}" type="number">
             <button type="submit">Atualizar produto</button>
         </form>
+        <span>Não é permitido diminuir o estoque. Caso deseje é recomendado apagar o produto e inseri-lo novamente!</span>
         <div th:if="${success} != null">
             <div th:replace="~{fragments/body-fragments :: warning-messages}"></div>
             <div th:if="${success} == false">
