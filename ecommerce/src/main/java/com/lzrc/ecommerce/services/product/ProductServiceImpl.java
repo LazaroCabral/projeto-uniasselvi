@@ -3,7 +3,6 @@ package com.lzrc.ecommerce.services.product;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -45,9 +44,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductInsertFlow productInsertFlow;
-
-    @Value("${products.held-product-time-limit}")
-    private Long expirationTime;
 
     private void hasSufficientStock(Product product, Long quantity) throws InsufficientStockException{
         Long remainingStock = product.getAvailableStock() - quantity;
