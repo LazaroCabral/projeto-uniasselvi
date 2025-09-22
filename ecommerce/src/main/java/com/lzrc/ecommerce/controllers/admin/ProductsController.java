@@ -94,7 +94,7 @@ public class ProductsController {
     public ModelAndView updateProduct(@PathVariable String sku){
         ModelAndView mv = new ModelAndView("admin/products/update-product.html");
 
-        Optional<ProductRecordResponse> optionalProduct = productService.findById(sku);
+        Optional<ProductRecordResponse> optionalProduct = productService.findByIdToUpdate(sku);
 
         if(optionalProduct.isPresent()){
             mv.addObject("product", optionalProduct.get());

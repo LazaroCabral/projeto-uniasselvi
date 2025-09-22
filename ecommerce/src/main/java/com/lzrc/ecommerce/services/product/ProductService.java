@@ -20,6 +20,8 @@ public interface ProductService {
 
     Optional<ProductRecordResponse> findById(String sku);
 
+    Optional<ProductRecordResponse> findByIdToUpdate(String sku);
+
     Page<ProductRecordResponse> findAllProducts(Pageable pageable);
 
     Page<ProductRecordResponse> searchProducts(String name, Pageable pageable);

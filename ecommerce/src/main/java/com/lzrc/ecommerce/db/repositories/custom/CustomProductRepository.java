@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
@@ -28,5 +29,9 @@ public interface CustomProductRepository extends Repository<Product,String>{
 
      @Query("SELECT p FROM Product p JOIN FETCH p.productVersion WHERE p.sku = ?1")
      Optional<Product> findByIdAndFetchVersion(String sku);     
+
+     @Modifying
+     @Query("UPDATE Product p SET p.availableStock = p.availableStock + ?2 WHERE p.sku = ?1")
+     void incrementAvailableStock(String sku, Long availableStock);
 
 }

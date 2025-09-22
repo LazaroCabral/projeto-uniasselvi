@@ -2,6 +2,7 @@ package com.lzrc.ecommerce.db.entities;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -24,6 +25,7 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal price;
+    @Column(updatable = false)
     private Long availableStock;
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_version_id")
