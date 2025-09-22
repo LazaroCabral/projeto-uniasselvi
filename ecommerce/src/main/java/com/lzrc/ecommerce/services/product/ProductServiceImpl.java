@@ -1,15 +1,21 @@
 package com.lzrc.ecommerce.services.product;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lzrc.ecommerce.db.entities.Product;
+import com.lzrc.ecommerce.db.entities.ProductVersion;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
+import com.lzrc.ecommerce.db.repositories.ProductVersionsRepository;
 import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
@@ -31,11 +37,29 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     CustomProductRepository customProductRepository;
 
+    @Autowired
+    ProductVersionsRepository productVersionsRepository;
+
+    @Value("${products.held-product-time-limit}")
+    private Long expirationTime;
+
     private void hasSufficientStock(Product product, Long quantity) throws InsufficientStockException{
         Long remainingStock = product.getAvailableStock() - quantity;
         if(remainingStock >= 0){
             product.setAvailableStock(remainingStock);
         } else{throw new InsufficientStockException();}
+    }
+
+    private ProductVersion createProductVersion(Product product){
+        return new ProductVersion(
+            product.getSku(), product.getName(), product.getPrice(),
+            product.getDescription(),LocalDateTime.now());
+    }
+
+    private void setNewProductVersion(Product product){
+            ProductVersion productVersion = createProductVersion(product);
+            productVersion = productVersionsRepository.save(productVersion);
+            product.setProductVersion(productVersion);
     }
 
     @Override
@@ -44,17 +68,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void insert(Product product) throws ProductAlreadyExistsException {
         boolean productAlreadyExists = productRepository.existsById(product.getSku());
         if(productAlreadyExists){
             throw new ProductAlreadyExistsException();
-        } else {productRepository.save(product);}
+        } else {
+            setNewProductVersion(product);
+            productRepository.save(product);
+        }
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(Product product) throws ProductNotFoundException {
         boolean productExists = productRepository.existsById(product.getSku());
         if(productExists){
+            setNewProductVersion(product);
             productRepository.save(product);
         } else {throw new ProductNotFoundException();}
     }

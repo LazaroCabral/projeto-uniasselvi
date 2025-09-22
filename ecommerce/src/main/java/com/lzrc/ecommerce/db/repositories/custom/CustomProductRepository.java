@@ -26,4 +26,7 @@ public interface CustomProductRepository extends Repository<Product,String>{
      @Query("SELECT p FROM Product p WHERE p.sku = ?1")
      Optional<Product> findByIdWithWriteLock(String sku);
 
+     @Query("SELECT p FROM Product p JOIN FETCH p.productVersion WHERE p.sku = ?1")
+     Optional<Product> findByIdAndFetchVersion(String sku);     
+
 }

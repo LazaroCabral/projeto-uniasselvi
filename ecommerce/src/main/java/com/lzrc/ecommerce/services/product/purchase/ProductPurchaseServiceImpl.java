@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.entities.PurchaseRecord;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
+import com.lzrc.ecommerce.db.repositories.ProductVersionsRepository;
 import com.lzrc.ecommerce.db.repositories.PurchaseRecordsRepository;
+import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.client.exceptions.InsufficientBalanceException;
 import com.lzrc.ecommerce.services.client.session.ClientSessionService;
@@ -29,7 +31,13 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
     ProductRepository productRepository;
 
     @Autowired
+    CustomProductRepository customProductRepository;
+
+    @Autowired
     PurchaseRecordsRepository purchaseRecordsRepository;
+
+    @Autowired
+    ProductVersionsRepository productVersionsRepository;
 
     @Autowired
     ProductService productService;
@@ -53,8 +61,8 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
 
     private void registryPurchase(HeldProduct heldProduct){
         PurchaseRecord purchaseRecord = new PurchaseRecord(
-            clientSessionService.getActiveClient(), heldProduct.getSku(), heldProduct.getName(),
-            heldProduct.getPrice());
+            clientSessionService.getActiveClient(),
+            heldProduct.getProductVersion());
         purchaseRecordsRepository.save(purchaseRecord);
     }
 
@@ -73,10 +81,10 @@ public class ProductPurchaseServiceImpl implements ProductPurchaseService {
 
     @Override
     public ProductRecordResponse holdProduct(String sku) throws ProductNotFoundException {
-        Optional<Product> optionalProduct =  productRepository.findById(sku);
+        Optional<Product> optionalProduct = customProductRepository.findByIdAndFetchVersion(sku);
         if(optionalProduct.isPresent()){
             Product product = optionalProduct.get();
-            HeldProduct heldProduct = new HeldProduct(product, System.currentTimeMillis());
+            HeldProduct heldProduct = new HeldProduct(product.getProductVersion(), System.currentTimeMillis());
             heldProductsSessionStorage.setHeldProductOnSession(heldProduct);
             return new ProductRecordResponse(product.getSku(), product.getName(),
                 product.getDescription(), product.getPrice(), product.getAvailableStock());
