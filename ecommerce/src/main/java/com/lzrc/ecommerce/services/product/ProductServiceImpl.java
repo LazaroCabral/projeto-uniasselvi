@@ -1,8 +1,13 @@
 package com.lzrc.ecommerce.services.product;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -122,6 +127,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<ProductRecordResponse> findById(String sku) {
         return customProductRepository.findById(sku);
+    }
+
+    public List<ProductRecordResponse> findMostPurchasedProductsToday(){
+        LocalDateTime since = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
+        LocalDateTime until = since.with(LocalTime.MAX);
+        return customProductRepository.findMostPurchasedProducts(
+            since, until,
+            10L, Limit.of(6));
     }
 
 }

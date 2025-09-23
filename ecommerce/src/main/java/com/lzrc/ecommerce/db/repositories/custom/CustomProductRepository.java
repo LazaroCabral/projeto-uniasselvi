@@ -1,7 +1,10 @@
 package com.lzrc.ecommerce.db.repositories.custom;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
@@ -22,6 +25,11 @@ public interface CustomProductRepository extends Repository<Product,String>{
      Page<ProductRecordResponse> findAll(Pageable pageable);
 
      Page<ProductRecordResponse> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
+     @Query("SELECT p FROM Product p WHERE p.productVersion IN " +
+          "(SELECT pr.productVersion FROM PurchaseRecord pr WHERE pr.purchasedAt BETWEEN ?1 AND ?2 " +
+                    "GROUP BY pr.productVersion HAVING count(pr.productVersion) >= ?3)")
+     List<ProductRecordResponse> findMostPurchasedProducts(LocalDateTime since, LocalDateTime until, Long quantityPurchased, Limit size);
 
      @Lock(LockModeType.PESSIMISTIC_WRITE)
      @Query("SELECT p FROM Product p WHERE p.sku = ?1")
