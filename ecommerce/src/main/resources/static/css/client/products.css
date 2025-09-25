@@ -1,0 +1,9 @@
+.most-purchased-products-container{
+    margin: 20px 0 20px 0;
+    border-style: solid;
+    border-color: gray;
+    border-radius: 20px;
+    border-width: thin;
+    padding: 10px;
+    width: 90%;
+}
