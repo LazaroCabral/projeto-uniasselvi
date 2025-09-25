@@ -24,6 +24,7 @@
             <button type="submit">Atualizar produto</button>
         </form>
         <span>Não é permitido diminuir o estoque. Caso deseje é recomendado apagar o produto e inseri-lo novamente!</span>
+        <span>Dica: evite clicar em atualizar sem ter alterado o produto. Isso pode prejudicar seu ranqueamento na lista de "mais comprados"!</span>
         <div th:if="${success} != null">
             <div th:replace="~{fragments/body-fragments :: warning-messages}"></div>
             <div th:if="${success} == false">
