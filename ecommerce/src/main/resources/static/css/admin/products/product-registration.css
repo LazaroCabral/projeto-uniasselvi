@@ -1,0 +1,41 @@
+
+.product-registration-container{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    margin-top: 70px;
+}
+
+.product-registration-section{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.product-registration-fields{
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.product-image-registration-field{
+
+}
+
+.product-registration-text-fields{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: auto;
+    column-gap: 5px;
+    align-items: baseline;
+}
+
+.product-registration-field{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.select-image-field{
+
+}
