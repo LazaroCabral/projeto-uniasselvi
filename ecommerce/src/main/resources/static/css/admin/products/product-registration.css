@@ -39,3 +39,16 @@
 .select-image-field{
 
 }
+
+.product-registration-hints{
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 5px;
+    margin-top: 20px;
+    padding: 10px 0 10px 0;
+}
+
+.product-registration-hint{
+    display: block;
+    padding: 10px 0 10px 0;
+}

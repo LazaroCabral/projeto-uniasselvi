@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link th:replace="~{fragments/head-fragments :: css-bootstrap}">
         <link th:replace="~{fragments/head-fragments :: containers-css}">
+        <link th:replace="~{fragments/admin/head-fragments :: product-registration-style}">
     </head>
     <body>
         <header th:replace="~{fragments/admin/header-fragments :: authenticated-admin-header}"></header>
@@ -23,8 +24,10 @@
             <input th:field="*{availableStock}" type="number">
             <button type="submit">Atualizar produto</button>
         </form>
-        <span>Não é permitido diminuir o estoque. Caso deseje é recomendado apagar o produto e inseri-lo novamente!</span>
-        <span>Dica: evite clicar em atualizar sem ter alterado o produto. Isso pode prejudicar seu ranqueamento na lista de "mais comprados"!</span>
+        <div class="product-registration-hints">
+            <span class="product-registration-hint">Não é permitido diminuir o estoque. Caso deseje é recomendado apagar o produto e inseri-lo novamente!</span>
+            <span class="product-registration-hint">Dica: evite clicar em atualizar sem ter alterado o produto. Isso pode prejudicar seu ranqueamento na lista de "mais comprados"!</span>
+        </div>
         <div th:if="${success} != null">
             <div th:replace="~{fragments/body-fragments :: warning-messages}"></div>
             <div th:if="${success} == false">
