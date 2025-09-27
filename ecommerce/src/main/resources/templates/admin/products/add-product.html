@@ -43,16 +43,17 @@
                     </div>
                     <button type="submit">Adicionar produto</button>
                 </form>
+                <span th:if="${success} != null" th:text="(${success} == true)? 'Produto cadastrado com sucesso!' : 'Houve um erro ao cadastrar o Produto!'"></span>
+                <div th:replace="~{fragments/body-fragments :: error-messages}"></div>
+                <div th:if="${productDTO} != null" th:object="${productDTO}">
+                    <p th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></p>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                    <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+                    <p th:if="${#fields.hasErrors('availableStock')}" th:errors="*{availableStock}"></p>
+                </div>
             </div>
         </div>
-        <span th:if="${success} != null" th:text="(${success} == true)? 'Produto cadastrado com sucesso!' : 'Houve um erro ao cadastrar o Produto!'"></span>
-        <div th:replace="~{fragments/body-fragments :: error-messages}"></div>
-        <div th:if="${productRecord} != null" th:object="${productRecord}">
-            <p th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></p>
-            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
-            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
-            <p th:if="${#fields.hasErrors('availableStock')}" th:errors="*{availableStock}"></p>
-        </div>
+
     </body>
 </html>
