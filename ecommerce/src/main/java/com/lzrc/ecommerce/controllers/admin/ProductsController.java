@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lzrc.ecommerce.db.entities.Product;
-import com.lzrc.ecommerce.records.ProductRecord;
+import com.lzrc.ecommerce.records.ProductDTO;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.product.ProductService;
 import com.lzrc.ecommerce.services.product.exceptions.ProductAlreadyExistsException;
@@ -58,15 +58,15 @@ public class ProductsController {
     @PostMapping(path = "/add-product", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
     public ModelAndView addProductPost(@RequestParam("product-image") MultipartFile productImage,
-            @Valid ProductRecord productRecord, BindingResult bindingResult) {
+            @Valid ProductDTO productDTO, BindingResult bindingResult) {
                 
         ModelAndView mv = new ModelAndView("admin/products/add-product.html");
         if(bindingResult.hasErrors()){
             return mv;
         }
 
-        Product product = new Product(productRecord.sku(), productRecord.name(), 
-            productRecord.description(), productRecord.price(), productRecord.availableStock());
+        Product product = new Product(productDTO.getSku(), productDTO.getName(), 
+            productDTO.getDescription(), productDTO.getPrice(), productDTO.getAvailableStock());
 
         try {
             productService.insert(product);
@@ -109,15 +109,15 @@ public class ProductsController {
     @PostMapping(path = "/update-product", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional
     public ModelAndView updateProductPost(@RequestParam("product-image") MultipartFile productImage,
-            @Valid ProductRecord productRecord, BindingResult bindingResult) {
+            @Valid ProductDTO productDTO, BindingResult bindingResult) {
                 
         ModelAndView mv = new ModelAndView("redirect:/admin/products");
         if(bindingResult.hasErrors()){
             return mv;
         }
 
-        Product product = new Product(productRecord.sku(), productRecord.name(), 
-            productRecord.description(), productRecord.price(), productRecord.availableStock());
+        Product product = new Product(productDTO.getSku(), productDTO.getName(), 
+            productDTO.getDescription(), productDTO.getPrice(), productDTO.getAvailableStock());
 
         try {
             productService.update(product);
