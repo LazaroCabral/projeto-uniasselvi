@@ -6,6 +6,4 @@ public interface ProductUpdateFlow {
 
     void update(Product product);
 
-    void setProductForUpdate(Product product);
-
 }

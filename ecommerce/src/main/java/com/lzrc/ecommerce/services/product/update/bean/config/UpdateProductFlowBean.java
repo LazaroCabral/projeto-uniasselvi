@@ -29,10 +29,10 @@ public class UpdateProductFlowBean {
         public ProductUpdateFlowStep build(){
             return new ProductUpdateFlowStep() {
                 @Override
-                public void update(Product product) {
+                public void update(Product originalProduct ,Product updatedProduct) {
                     updateProductFlowSteps.
                         forEach( updateProductFlow -> {
-                            updateProductFlow.update(product);
+                            updateProductFlow.update(originalProduct, updatedProduct);
                         } );
                 }
             };

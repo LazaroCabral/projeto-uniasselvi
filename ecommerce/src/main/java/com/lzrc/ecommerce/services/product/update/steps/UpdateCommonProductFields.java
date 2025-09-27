@@ -9,13 +9,10 @@ import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
 import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.services.product.ProductUtils;
-import com.lzrc.ecommerce.services.product.update.rules.ProductUpdateRules;
+import com.lzrc.ecommerce.services.product.update.CompareProductCommonFields;
 
 @Component
 public class UpdateCommonProductFields implements ProductUpdateFlowStep {
-
-    @Autowired
-    ProductUpdateRules productUpdateRules;
 
     @Autowired
     ProductRepository productRepository;
@@ -26,17 +23,17 @@ public class UpdateCommonProductFields implements ProductUpdateFlowStep {
     @Autowired
     ProductUtils productUtils;
 
+    private boolean hasChanged(Product firstProduct, Product secondProduct){
+        return !CompareProductCommonFields.productsFieldsIsEquals(firstProduct, secondProduct);
+    }
+
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public void update(Product product) {
-        int isUpdated = customProductRepository.updateCommonFields(
-            product.getSku(), product.getName(), 
-            product.getDescription(), product.getPrice());
-        if(isUpdated == 1){
-            productUtils.setNewProductVersion(product);
-            productRepository.save(product);
+    public void update(Product originalProduct, Product updatedProduct) {
+        if(hasChanged(originalProduct, updatedProduct)){
+            productUtils.setNewProductVersion(updatedProduct);
+            productRepository.save(updatedProduct);
         }
-
     }
 
 

@@ -92,7 +92,6 @@ public class ProductServiceImpl implements ProductService {
         Optional<ProductRecordResponse> productRecordOptional = Optional.empty();
         if(optionalProduct.isPresent()){
             Product product = optionalProduct.get();
-            productUpdateFlow.setProductForUpdate(product);
             productRecordOptional = Optional.of(toProductRecordResponse(product));
         }
         return productRecordOptional;

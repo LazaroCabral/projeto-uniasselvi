@@ -1,9 +1,12 @@
 package com.lzrc.ecommerce.services.product.update;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lzrc.ecommerce.db.entities.Product;
+import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.services.product.update.rules.ProductUpdateRules;
 import com.lzrc.ecommerce.services.product.update.steps.ProductUpdateFlowStep;
 
@@ -14,17 +17,18 @@ public class ProductUpdateFlowImpl implements ProductUpdateFlow {
     ProductUpdateFlowStep updateProductFlowStep;
 
     @Autowired
+    CustomProductRepository customProductRepository;
+
+    @Autowired
     ProductUpdateRules productUpdateRules;
 
     @Override
     public void update(Product product) {
-        updateProductFlowStep.update(product);
+        Optional<Product> optionalOriginalProduct = customProductRepository.findByIdWithWriteLock(product.getSku());
+        if(optionalOriginalProduct.isPresent()){
+            updateProductFlowStep.update(optionalOriginalProduct.get(), product);
+        }
+        
     }
-
-    @Override
-    public void setProductForUpdate(Product product) {
-        productUpdateRules.setProductForUpdate(product);
-    }
-
 
 }
