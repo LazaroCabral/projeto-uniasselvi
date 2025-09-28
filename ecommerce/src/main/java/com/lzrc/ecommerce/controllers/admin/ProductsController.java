@@ -35,6 +35,16 @@ public class ProductsController {
     @Autowired
     ProductService productService;
 
+    private void setProductAtViewIfFound(Optional<ProductRecordResponse> optionalProductRecordResponse, ModelAndView mv){
+        optionalProductRecordResponse.ifPresentOrElse( productRecordResponse -> {
+            mv.addObject("product", productRecordResponse);
+            mv.addObject("success", Boolean.TRUE);
+        }, () -> {
+            mv.addObject("success", Boolean.FALSE);
+            mv.addObject("errorMessage", "Produto não encontrado!");
+        });
+    }
+
     @GetMapping("/products")
     public ModelAndView home(Pageable pageable, @RequestParam(required = false) String name){
         ModelAndView mv = new ModelAndView("admin/products/products.html");
@@ -95,14 +105,7 @@ public class ProductsController {
         ModelAndView mv = new ModelAndView("admin/products/update-product.html");
 
         Optional<ProductRecordResponse> optionalProduct = productService.findByIdToUpdate(sku);
-
-        if(optionalProduct.isPresent()){
-            mv.addObject("product", optionalProduct.get());
-            mv.addObject("success", Boolean.TRUE);
-        } else {
-            mv.addObject("success", Boolean.FALSE);
-            mv.addObject("errorMessage", "Produto não encontrado!");
-        }
+        setProductAtViewIfFound(optionalProduct, mv);
         return mv;
     }
 
@@ -113,6 +116,9 @@ public class ProductsController {
                 
         ModelAndView mv = new ModelAndView("redirect:/admin/products");
         if(bindingResult.hasErrors()){
+            Optional<ProductRecordResponse> optionalProductDTO = productService.findByIdToUpdate(productDTO.getSku());
+            setProductAtViewIfFound(optionalProductDTO, mv);
+            mv.setViewName("admin/products/update-product.html");
             return mv;
         }
 
