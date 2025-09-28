@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.records.ProductDTO;
@@ -100,8 +101,8 @@ public class ProductsController {
         return mv;
     }
 
-    @GetMapping("/update-product/{sku}")
-    public ModelAndView updateProduct(@PathVariable String sku){
+    @GetMapping("/update-product")
+    public ModelAndView updateProduct(@RequestParam(name = "product-sku", required = true) String sku, RedirectAttributes redirectAttributes){
         ModelAndView mv = new ModelAndView("admin/products/update-product.html");
 
         Optional<ProductRecordResponse> optionalProduct = productService.findByIdToUpdate(sku);
