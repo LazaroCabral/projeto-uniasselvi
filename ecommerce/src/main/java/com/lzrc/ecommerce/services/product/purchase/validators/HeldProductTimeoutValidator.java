@@ -1,20 +1,21 @@
 package com.lzrc.ecommerce.services.product.purchase.validators;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.lzrc.ecommerce.services.application.management.ApplicationManagementService;
 import com.lzrc.ecommerce.services.product.purchase.HeldProduct;
 
 @Component
 public class HeldProductTimeoutValidator implements HeldProductsValidator {
 
-    @Value("${products.held-product-time-limit}")
-    private Long heldProductTimeLimit;
+    @Autowired
+    private ApplicationManagementService applicationManagementService;
 
     @Override
     public boolean heldProductIsValid(HeldProduct heldProduct) {
         Long heldProductTime = System.currentTimeMillis() - heldProduct.getHeldAt();
-        if (heldProductTime > heldProductTimeLimit) {
+        if (heldProductTime > applicationManagementService.getHeldProductsTimeout()) {
             return false;
         }
         else {
