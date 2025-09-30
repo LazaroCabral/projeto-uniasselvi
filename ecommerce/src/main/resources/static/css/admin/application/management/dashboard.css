@@ -1,0 +1,41 @@
+.dashboard{
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: left;
+    width: 700px;
+}
+
+.dashboard-section{
+    width: 100%;
+    border-width: thin;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: gray;
+    padding: 20px;
+}
+
+.dashboard-section input[type="text"] {
+    min-width: none;
+}
+
+.dashboard-section button[type="submit"] {
+    margin-top: 10px;
+}
+
+.dashboard-input-fields{
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.dashboard-input-field{
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 200px;
+}
+
+
+.dashboard-errors{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}

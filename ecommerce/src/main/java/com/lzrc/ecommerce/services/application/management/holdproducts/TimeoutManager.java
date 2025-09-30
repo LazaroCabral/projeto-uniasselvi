@@ -12,6 +12,10 @@ public class TimeoutManager {
         this.timeout = timeout;
     }
 
+    public synchronized void setTimeout(Long timeoutAsTimemillis){
+        this.timeout = timeoutAsTimemillis;
+    }
+
     public synchronized Long getTimeout(){
         return this.timeout;
     }

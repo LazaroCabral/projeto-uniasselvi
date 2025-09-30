@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:replace="~{fragments/head-fragments :: css-bootstrap}">
+    <link th:replace="~{fragments/head-fragments :: containers-css}">
+    <link th:replace="~{fragments/admin/application/management/head-fragments :: dashboard-style}">
+    <title>Gerenciamento da aplicação</title>
+</head>
+<body>
+    <header th:replace="~{fragments/admin/header-fragments :: authenticated-admin-header}"></header>
+    <div class="centralized-main-container">
+        <div class="dashboard">
+            <h1>Dashboard</h1>
+            <div class="dashboard-section">
+                <div class="held-products-timeout-box">
+                    <form th:action="@{/admin/application/management/heldproductstimeout/update}" th:object="${updateHeldProductsTimeoutDTO}" method="post">
+                        <div class="dashboard-input-fields">
+                            <div class="dashboard-input-field">
+                                <label for="heldProductsTimeout">Tempo de expiração de produtos pegos: </label>
+                                <input th:field="*{heldProductsTimeout}" type="number">
+                            </div>
+                        </div>
+                        <button type="submit">alterar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-errors" th:if="${dashboardErrors} != null" th:each="dashboardError : ${dashboardErrors}">
+            <p th:text="${dashboardError}"></p>
+        </div>
+    </div>
+</body>
+</html>

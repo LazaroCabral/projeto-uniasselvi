@@ -4,4 +4,6 @@ public interface ApplicationManagementService {
 
     Long getHeldProductsTimeout();
 
+    void updateHeldProductsTimeout(Long heldProductsTimeout);
+
 }

@@ -14,5 +14,10 @@ public class ApplicationManagementServiceImpl implements ApplicationManagementSe
     public Long getHeldProductsTimeout(){
         return timeoutManager.getTimeout();
     }
+
+    @Override
+    public void updateHeldProductsTimeout(Long heldProductsTimeout) {
+        this.timeoutManager.setTimeout(heldProductsTimeout);
+    }
     
 }
