@@ -1,5 +1,6 @@
 package com.lzrc.ecommerce.services.product;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -20,7 +21,11 @@ public interface ProductService {
 
     Optional<ProductRecordResponse> findById(String sku);
 
+    Optional<ProductRecordResponse> findByIdToUpdate(String sku);
+
     Page<ProductRecordResponse> findAllProducts(Pageable pageable);
+
+    List<ProductRecordResponse> findMostPurchasedProductsToday();
 
     Page<ProductRecordResponse> searchProducts(String name, Pageable pageable);
 

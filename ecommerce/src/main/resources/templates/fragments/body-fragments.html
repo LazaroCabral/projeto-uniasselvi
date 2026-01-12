@@ -18,6 +18,7 @@
         </div>
 
         <div class="container" th:fragment="products-list">
+            <span>Produtos</span>
             <div class="row row-cols-4" th:if="${products} != null">
                 <div class="row row-cols-1" th:each="product : ${products}">
                     <div class="product-image-container-item-list">
@@ -44,6 +45,24 @@
         <div th:fragment="warning-messages">
             <span th:text="${warningMessage}"></span>
         </div>
+
+
+        <div class="container" th:fragment="most-purchased-products">
+            <div class="most-purchased-products-container" th:if="${mostPurchasedProducts} != null and ${mostPurchasedProducts.size} > 0">
+                <span>Produtos mais comprados!</span>
+                <div class="row row-cols-4">
+                    <div class="row row-cols-1" th:each="mostPurchasedProduct : ${mostPurchasedProducts}">
+                        <div class="product-image-container-item-list">
+                            <img class="product-image" th:attr="src='/static/images/'+${mostPurchasedProduct.sku}+'.png'" height="50px" width="100px" alt="">
+                        </div>
+                        <p th:text="${mostPurchasedProduct.name}"></p>
+                        <p th:text="${mostPurchasedProduct.price}"></p>
+                        <form th:attr="action=@{/public/product/}+${mostPurchasedProduct.sku}" method="get">
+                            <button class="btn btn-primary" type="submit">Conferir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
     </body>
 </html>

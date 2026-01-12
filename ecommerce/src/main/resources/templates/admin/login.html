@@ -5,16 +5,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link th:replace="~{fragments/head-fragments :: css-bootstrap}">
         <link th:replace="~{fragments/head-fragments :: containers-css}">
+        <link th:replace="~{fragments/head-fragments :: general-login-css}">
     </head>
     <body>
         <header th:replace="~{fragments/admin/header-fragments :: public-header}"></header>
-        <h1>Admin Login</h1>
-        <form method="post" th:attr="action=@{/admin/login}">
-            <label for="username">cpf:</label>
-            <input type="text" name="username" id="username">
-            <label for="password">senha:</label>
-            <input type="text" name="password" id="password">
-            <button type="submit">Entrar</button>
-        </form>
+        <div class="login-main-container">
+            <div class="login-box-content">
+                <h1>Admin Login</h1>
+                <form method="post" th:attr="action=@{/admin/login}">
+                    <div class="login-fields">
+                        <div class="login-field">
+                            <label for="username">cpf:</label>
+                            <input type="text" name="username" id="username">
+                        </div>
+                        <div class="login-field">
+                            <label for="password">senha:</label>
+                            <input type="text" name="password" id="password">
+                        </div>
+                    </div>
+                    <button type="submit">Entrar</button>
+                </form>
+            </div>
+        </div>
     </body>
 </html>

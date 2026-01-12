@@ -5,33 +5,55 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link th:replace="~{fragments/head-fragments :: css-bootstrap}">
         <link th:replace="~{fragments/head-fragments :: containers-css}">
+        <link th:replace="~{fragments/admin/head-fragments :: product-registration-style}">
     </head>
     <body>
         <header th:replace="~{fragments/admin/header-fragments :: authenticated-admin-header}"></header>
-        <h1>Adicionar produto</h1>
-        <form method="post" th:attr="action=@{/admin/add-product}" enctype="multipart/form-data">
-            <label for="product-image">imagem do produto:</label>
-            <input id="product-image" type="file" name="product-image">
-            <label for="sku">sku:</label>
-            <input id="sku" type="text" name="sku">
-            <label for="name">nome:</label>
-            <input id="name" type="text" name="name">
-            <label for="description">descrição:</label>
-            <textarea id="description" name="description"></textarea>
-            <label for="price">preço:</label>
-            <input id="price" type="text" name="price">
-            <label for="availableStock">estoque disponivel:</label>
-            <input id="availableStock" type="number" th:value="0" name="availableStock">
-            <button type="submit">Adicionar produto</button>
-        </form>
-        <span th:if="${success} != null" th:text="(${success} == true)? 'Produto cadastrado com sucesso!' : 'Houve um erro ao cadastrar o Produto!'"></span>
-        <div th:replace="~{fragments/body-fragments :: error-messages}"></div>
-        <div th:if="${productRecord} != null" th:object="${productRecord}">
-            <p th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></p>
-            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
-            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
-            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
-            <p th:if="${#fields.hasErrors('availableStock')}" th:errors="*{availableStock}"></p>
+        <div class="product-registration-container">
+            <div class="product-registration-section">
+                <h1>Adicionar produto</h1>
+                <form method="post" th:attr="action=@{/admin/add-product}" enctype="multipart/form-data">
+                    <div class="product-registration-fields">
+                        <div class="product-image-registration-field">
+                            <label for="product-image">imagem do produto:</label>
+                            <input id="product-image" type="file" name="product-image">
+                        </div>
+                        <div class="product-registration-text-fields">
+                            <div class="product-registration-field">
+                                <label for="sku">sku:</label>
+                                <input id="sku" type="text" name="sku">
+                            </div>
+                            <div class="product-registration-field">
+                                <label for="name">nome:</label>
+                                <input id="name" type="text" name="name">
+                            </div>
+                            <div class="product-registration-field">
+                                <label for="description">descrição:</label>
+                                <textarea id="description" name="description"></textarea>
+                            </div>
+                            <div class="product-registration-field">
+                                <label for="price">preço:</label>
+                                <input id="price" type="text" name="price">
+                            </div>
+                            <div class="product-registration-field">
+                                <label for="availableStock">estoque disponivel:</label>
+                                <input id="availableStock" type="number" th:value="0" name="availableStock">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit">Adicionar produto</button>
+                </form>
+                <span th:if="${success} != null" th:text="(${success} == true)? 'Produto cadastrado com sucesso!' : 'Houve um erro ao cadastrar o Produto!'"></span>
+                <div th:replace="~{fragments/body-fragments :: error-messages}"></div>
+                <div th:if="${productDTO} != null" th:object="${productDTO}">
+                    <p th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></p>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+                    <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+                    <p th:if="${#fields.hasErrors('availableStock')}" th:errors="*{availableStock}"></p>
+                </div>
+            </div>
         </div>
+
     </body>
 </html>

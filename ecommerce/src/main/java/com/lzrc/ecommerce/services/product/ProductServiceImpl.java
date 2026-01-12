@@ -1,15 +1,23 @@
 package com.lzrc.ecommerce.services.product;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lzrc.ecommerce.db.entities.Product;
 import com.lzrc.ecommerce.db.repositories.ProductRepository;
+import com.lzrc.ecommerce.db.repositories.ProductVersionsRepository;
 import com.lzrc.ecommerce.db.repositories.custom.CustomProductRepository;
 import com.lzrc.ecommerce.records.response.ProductRecordResponse;
 import com.lzrc.ecommerce.services.product.exceptions.InsufficientStockException;
@@ -18,6 +26,8 @@ import com.lzrc.ecommerce.services.product.exceptions.ProductNotFoundException;
 import com.lzrc.ecommerce.services.product.image.ProductImageFileService;
 import com.lzrc.ecommerce.services.product.image.exceptions.InvalidImageFormatException;
 import com.lzrc.ecommerce.services.product.image.exceptions.SaveImageException;
+import com.lzrc.ecommerce.services.product.insert.ProductInsertFlow;
+import com.lzrc.ecommerce.services.product.update.ProductUpdateFlow;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -31,11 +41,25 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     CustomProductRepository customProductRepository;
 
+    @Autowired
+    ProductVersionsRepository productVersionsRepository;
+
+    @Autowired
+    ProductUpdateFlow productUpdateFlow;
+
+    @Autowired
+    ProductInsertFlow productInsertFlow;
+
     private void hasSufficientStock(Product product, Long quantity) throws InsufficientStockException{
         Long remainingStock = product.getAvailableStock() - quantity;
         if(remainingStock >= 0){
             product.setAvailableStock(remainingStock);
         } else{throw new InsufficientStockException();}
+    }
+
+    private ProductRecordResponse toProductRecordResponse(Product product){
+        return new ProductRecordResponse(product.getSku(), product.getName(),
+        product.getDescription(), product.getPrice(), product.getAvailableStock());
     }
 
     @Override
@@ -44,19 +68,33 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void insert(Product product) throws ProductAlreadyExistsException {
         boolean productAlreadyExists = productRepository.existsById(product.getSku());
         if(productAlreadyExists){
             throw new ProductAlreadyExistsException();
-        } else {productRepository.save(product);}
+        } else {
+            productInsertFlow.insert(product);
+        }
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(Product product) throws ProductNotFoundException {
         boolean productExists = productRepository.existsById(product.getSku());
         if(productExists){
-            productRepository.save(product);
+            productUpdateFlow.update(product);
         } else {throw new ProductNotFoundException();}
+    }
+
+    public Optional<ProductRecordResponse> findByIdToUpdate(String sku){
+        Optional<Product> optionalProduct = productRepository.findById(sku);
+        Optional<ProductRecordResponse> productRecordOptional = Optional.empty();
+        if(optionalProduct.isPresent()){
+            Product product = optionalProduct.get();
+            productRecordOptional = Optional.of(toProductRecordResponse(product));
+        }
+        return productRecordOptional;
     }
 
     @Override
@@ -88,6 +126,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<ProductRecordResponse> findById(String sku) {
         return customProductRepository.findById(sku);
+    }
+
+    public List<ProductRecordResponse> findMostPurchasedProductsToday(){
+        LocalDateTime since = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
+        LocalDateTime until = since.with(LocalTime.MAX);
+        return customProductRepository.findMostPurchasedProducts(
+            since, until,
+            10L, Limit.of(6));
     }
 
 }

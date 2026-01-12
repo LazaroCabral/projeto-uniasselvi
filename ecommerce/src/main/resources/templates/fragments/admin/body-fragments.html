@@ -26,7 +26,8 @@
                     <p th:text="${product.name}"></p>
                     <p th:text="${product.price}"></p>
                     <div class="row row-cols-2">
-                        <form th:attr="action=@{/admin/update-product/}+${product.sku}" method="get">
+                        <form th:attr="action=@{/admin/update-product}" method="get">
+                            <input type="hidden" name="product-sku" th:value="${product.sku}">
                             <button class="btn btn-primary" type="submit">Atualizar</button>
                         </form>
                         <form th:attr="action=@{/admin/delete-product/}+${product.sku}" method="get">

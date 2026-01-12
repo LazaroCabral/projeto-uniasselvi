@@ -78,6 +78,13 @@ public class ClientServiceImpl implements ClientService {
         } else {
             throw new ClientNotFoundException();}
     }
+
+    @Override
+    public Optional<Client> findById(String cpf) {
+        return clientRepository.findById(cpf);
+    }
+
+    
     
 
 }

@@ -1,5 +1,7 @@
 package com.lzrc.ecommerce.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +28,15 @@ public class ProductsController {
     public ModelAndView home(Pageable pageable, @RequestParam(required = false) String name){
         ModelAndView mv = new ModelAndView("products.html");
         Page<ProductRecordResponse> products;
+        List<ProductRecordResponse> mostPurchasedProducts = new ArrayList<>();
         if(name != null){
              products = productService.searchProducts(name, pageable);
              mv.addObject("searchName", name);
         } else{
+            mostPurchasedProducts = productService.findMostPurchasedProductsToday();
             products = productService.findAllProducts(pageable);
         }
+        mv.addObject("mostPurchasedProducts", mostPurchasedProducts);
         mv.addObject("products", products.getContent());
         mv.addObject("page", products);
         return mv;
